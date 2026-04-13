@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Intellectual Tech Bridge – Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#0d9488;--teal-dark:#0f766e;--teal-deeper:#134e4a;
+  --teal-lt:#f0fdfa;--teal-md:#99f6e4;--teal-glow:rgba(13,148,136,.15);
+  --navy:#0f2744;--navy-lt:#1e3a5f;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;--border-lt:#f1f5f9;
+  --white:#fff;--off:#fafcff;
+  --danger:#e11d48;--danger-lt:#ffe4e8;
+  --warn:#f59e0b;--warn-lt:#fef3c7;
+  --success:#059669;--success-lt:#d1fae5;
+  --info:#0284c7;--info-lt:#e0f2fe;
+  --sh-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 16px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
+  --sh-lg:0 20px 40px rgba(0,0,0,.1),0 8px 16px rgba(0,0,0,.06);
+  --sh-teal:0 8px 24px rgba(13,148,136,.25);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--border-lt)}::-webkit-scrollbar-thumb{background:var(--teal-md);border-radius:10px}
+
+/* ── DARK MODE ── */
+body.dark{
+  --white:#0f172a;--off:#1e293b;--text:#e2e8f0;--muted:#94a3b8;
+  --border:#334155;--border-lt:#1e293b;--navy:#e2e8f0;--navy-lt:#94a3b8;
+  --teal-lt:#0d3330;--teal-md:#0d9488;
+}
+body.dark nav{background:rgba(15,23,42,.96)}
+body.dark .auth-container,body.dark .h-card,body.dark .mod-card,
+body.dark .step,body.dark .module-card,body.dark .dl-mod,
+body.dark .contact-method,body.dark .q-panel,body.dark .profile-card,
+body.dark .tool-card,body.dark .feat-card,body.dark .quiz-opt,
+body.dark .bookmark-item,body.dark .tip-card,body.dark .announce-card{background:#1e293b;border-color:#334155}
+body.dark .dl-table thead{background:#0f172a}
+body.dark .module-header{background:#1e293b}
+body.dark .page-hero{background:linear-gradient(180deg,#0d2420 0%,#0f172a 100%)}
+body.dark input,body.dark textarea,body.dark select{background:#0f172a;color:var(--text);border-color:#334155}
+body.dark .offer-strip{background:#0d2420;border-color:#0d9488}
+body.dark footer{background:#020617}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  justify-content:space-between;padding:0 48px;transition:box-shadow .3s}
+nav.scrolled{box-shadow:var(--sh-md)}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer}
+.brand-mark{width:42px;height:42px;background:linear-gradient(135deg,var(--teal),var(--teal-deeper));
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;color:white;box-shadow:0 4px 12px rgba(13,148,136,.3)}
+.brand-name{font-size:14px;font-weight:700;color:var(--navy);line-height:1.2}
+.brand-name small{display:block;font-size:11px;font-weight:400;color:var(--muted)}
+.nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.nav-links a,.nav-links .welcome-text,.nav-links .logout-btn{
+  text-decoration:none;font-size:13.5px;font-weight:500;padding:7px 14px;
+  border-radius:10px;transition:color .2s,background .2s,transform .15s;
+  cursor:pointer;border:none;font-family:inherit;background:transparent}
+.nav-links a{color:var(--muted)}
+.nav-links a:hover{color:var(--text);background:#f1f5f9;transform:translateY(-1px)}
+.nav-links a.active{color:var(--teal);background:var(--teal-lt);font-weight:600}
+.welcome-text{background:linear-gradient(135deg,var(--teal-lt),#ccfbf1);color:var(--teal-dark);
+  font-weight:600;pointer-events:none;border:1px solid var(--teal-md)!important}
+.logout-btn{border:1.5px solid var(--border)!important;color:var(--muted)}
+.logout-btn:hover{background:#fee2e2;border-color:var(--danger)!important;color:var(--danger)}
+.dark-toggle{background:none;border:1.5px solid var(--border);border-radius:10px;
+  width:36px;height:36px;cursor:pointer;font-size:16px;display:flex;align-items:center;
+  justify-content:center;color:var(--muted);transition:.2s;font-family:inherit}
+.dark-toggle:hover{background:var(--teal-lt);border-color:var(--teal);color:var(--teal)}
+
+/* ── PAGES ── */
+.page-section{display:none;padding-top:68px;min-height:100vh}
+.page-section.active-section{display:block}
+
+/* ── AUTH ── */
+.auth-wrapper{min-height:calc(100vh - 68px);display:flex;align-items:center;
+  justify-content:center;padding:40px 20px;
+  background:radial-gradient(ellipse at 60% 0%,rgba(13,148,136,.08) 0%,transparent 60%),
+  radial-gradient(ellipse at 10% 100%,rgba(15,39,68,.05) 0%,transparent 50%),var(--off)}
+.auth-container{width:100%;max-width:460px;background:var(--white);border-radius:28px;
+  border:1px solid var(--border);box-shadow:var(--sh-lg);overflow:hidden;
+  animation:slideUp .5s cubic-bezier(.16,1,.3,1) both}
+.auth-top-bar{height:5px;background:linear-gradient(90deg,var(--teal),var(--teal-md),var(--teal-dark))}
+.auth-inner{padding:36px 36px 32px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.auth-logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),var(--teal-deeper));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:11px;color:white;box-shadow:0 4px 10px rgba(13,148,136,.3)}
+.auth-logo-text{font-size:13px;font-weight:700;color:var(--navy)}
+.auth-logo-text small{display:block;font-size:11px;font-weight:400;color:var(--muted)}
+.auth-header{margin-bottom:24px}
+.auth-header h2{font-family:'Fraunces',serif;font-size:28px;color:var(--navy);line-height:1.1}
+.auth-header p{color:var(--muted);font-size:14px;margin-top:6px}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.input-group{display:flex;flex-direction:column;gap:6px}
+.input-group label{font-size:13px;font-weight:600;color:var(--navy)}
+.input-wrap{position:relative}
+.input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
+.input-group input,.input-group textarea,.input-group select{
+  width:100%;padding:11px 13px 11px 40px;border:1.5px solid var(--border);
+  border-radius:12px;font-size:14px;font-family:inherit;background:var(--off);
+  transition:border-color .2s,box-shadow .2s,background .2s;color:var(--text)}
+.input-group input:focus,.input-group textarea:focus,.input-group select:focus{
+  outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.15);background:var(--white)}
+.auth-btn{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;border:none;
+  padding:13px;border-radius:40px;font-weight:700;font-size:15px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;box-shadow:var(--sh-teal);margin-top:4px;font-family:inherit}
+.auth-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(13,148,136,.35)}
+.auth-footer{text-align:center;margin-top:18px;font-size:14px;color:var(--muted)}
+.auth-footer a{color:var(--teal);text-decoration:none;font-weight:600}
+.error-msg{background:var(--danger-lt);color:var(--danger);padding:10px 14px;
+  border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.success-msg{background:var(--success-lt);color:var(--success);padding:10px 14px;
+  border-radius:10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.pw-strength{height:4px;border-radius:4px;margin-top:6px;background:var(--border);overflow:hidden}
+.pw-bar{height:100%;border-radius:4px;transition:width .3s,background .3s;width:0%}
+.pw-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── HERO ── */
+.hero{padding:90px 60px 80px;max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:var(--teal-lt);
+  border:1px solid var(--teal-md);border-radius:100px;padding:6px 16px;
+  font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;
+  letter-spacing:.5px;margin-bottom:20px;animation:fadeUp .6s ease both}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(36px,4.5vw,56px);
+  line-height:1.08;color:var(--navy);margin-bottom:18px;animation:fadeUp .6s .1s ease both}
+.hero h1 em{font-style:italic;color:var(--teal)}
+.hero-desc{font-size:15.5px;color:var(--muted);line-height:1.85;margin-bottom:32px;animation:fadeUp .6s .2s ease both}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .6s .3s ease both}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;
+  font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;
+  transition:transform .18s,box-shadow .18s;font-family:inherit;border:none}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;box-shadow:var(--sh-teal)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(13,148,136,.35)}
+.btn-outline{background:var(--white);color:var(--text);border:1.5px solid var(--border)!important;box-shadow:var(--sh-sm)}
+.btn-outline:hover{border-color:var(--teal)!important;color:var(--teal)}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:10px}
+.hero-visual{animation:fadeUp .7s .15s ease both}
+.hero-card-stack{display:flex;flex-direction:column;gap:12px}
+.h-card{display:flex;align-items:flex-start;gap:14px;background:var(--white);
+  border:1px solid var(--border);border-radius:16px;padding:16px 18px;
+  box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s,border-color .2s}
+.h-card:hover{transform:translateX(6px);box-shadow:var(--sh-md);border-color:var(--teal-md)}
+.h-card-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.h-card-title{font-weight:700;font-size:13.5px;color:var(--navy);margin-bottom:3px}
+.h-card-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* ── OFFER STRIP ── */
+.offer-strip{background:linear-gradient(135deg,var(--teal-lt),#ccfbf1);
+  border-top:1px solid var(--teal-md);border-bottom:1px solid var(--teal-md);
+  padding:18px 60px;display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap}
+.offer-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--teal-deeper)}
+.offer-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+/* ── SECTION ── */
+.section{max-width:1100px;margin:0 auto;padding:72px 60px}
+.section-header{text-align:center;margin-bottom:48px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(24px,3.5vw,40px);color:var(--navy)}
+.section-sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:580px;margin-left:auto;margin-right:auto;line-height:1.7}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.step{text-align:center;padding:32px 22px;border-radius:20px;background:var(--white);
+  border:1px solid var(--border);box-shadow:var(--sh-sm);
+  transition:transform .2s,box-shadow .2s,border-color .2s}
+.step:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--teal-md)}
+.step-num{width:50px;height:50px;border-radius:14px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+  color:white;font-weight:800;font-size:20px;display:flex;align-items:center;
+  justify-content:center;margin:0 auto 18px;box-shadow:0 6px 16px rgba(13,148,136,.3)}
+.step h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.step p{font-size:13px;color:var(--muted);line-height:1.7}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.mod-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;
+  padding:26px 22px;transition:border-color .2s,transform .2s,box-shadow .2s;box-shadow:var(--sh-sm)}
+.mod-card:hover{border-color:var(--teal);transform:translateY(-4px);box-shadow:var(--sh-md)}
+.mod-icon-badge{width:46px;height:46px;border-radius:12px;background:var(--teal-lt);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  margin-bottom:14px;border:1px solid var(--teal-md)}
+.mod-card h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.mod-card p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.mod-link{font-size:13px;font-weight:700;color:var(--teal);text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;transition:gap .15s}
+.mod-link:hover{gap:8px}
+
+/* ── PAGE HERO ── */
+.page-hero{padding:72px 60px 52px;
+  background:linear-gradient(180deg,var(--teal-lt) 0%,var(--white) 100%);
+  border-bottom:1px solid var(--border);text-align:center}
+.page-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.page-hero h1{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,46px);
+  color:var(--navy);line-height:1.15;margin-bottom:14px}
+.page-hero h1 em{font-style:italic;color:var(--teal)}
+.page-hero p{color:var(--muted);font-size:15px;max-width:580px;margin:0 auto;line-height:1.75}
+
+/* ── ABOUT ── */
+.content{max-width:1060px;margin:0 auto;padding:72px 60px}
+.q-block{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-bottom:64px;align-items:start}
+.q-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.q-text h2{font-family:'Fraunces',serif;font-size:26px;color:var(--navy);margin-bottom:16px}
+.q-text p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:12px}
+.q-panel{display:flex;flex-direction:column;gap:18px;padding:28px;background:var(--off);border-radius:20px;border:1px solid var(--border)}
+.panel-item{display:flex;gap:14px;align-items:flex-start}
+.panel-emoji{font-size:20px;flex-shrink:0;margin-top:2px}
+.panel-title{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:3px}
+.panel-desc{font-size:13px;color:var(--muted);line-height:1.65}
+.goal-banner{background:linear-gradient(135deg,var(--navy),var(--navy-lt));border-radius:24px;padding:44px;text-align:center;color:white}
+.goal-banner h2{font-family:'Fraunces',serif;font-size:26px;margin-bottom:14px;line-height:1.3}
+.goal-banner h2 em{font-style:italic;color:var(--teal-md)}
+.goal-banner p{color:rgba(255,255,255,.7);font-size:14.5px;max-width:580px;margin:0 auto;line-height:1.8}
+
+/* ── MODULES ── */
+.modules-list{display:flex;flex-direction:column;gap:28px;margin-bottom:72px}
+.module-card{background:var(--white);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:var(--sh-sm);transition:box-shadow .2s}
+.module-card:hover{box-shadow:var(--sh-md)}
+.module-header{display:flex;align-items:center;gap:18px;padding:22px 28px;border-bottom:1px solid var(--border);background:var(--off)}
+.mod-icon-wrap{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--teal-lt),#ccfbf1);
+  display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid var(--teal-md);flex-shrink:0}
+.module-header h2{font-family:'Fraunces',serif;font-size:20px;color:var(--navy);margin-bottom:3px}
+.module-header p{font-size:13px;color:var(--muted)}
+.module-body{padding:24px 28px}
+.module-body p{font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:10px}
+.module-body p:last-child{margin-bottom:0}
+.module-body strong{color:var(--navy)}
+.module-tags{display:flex;flex-wrap:wrap;gap:8px;padding:12px 28px 22px}
+.tag{display:inline-block;padding:4px 12px;background:var(--teal-lt);color:var(--teal-dark);
+  border-radius:100px;font-size:11.5px;font-weight:600;border:1px solid var(--teal-md)}
+.dl-section{margin-top:48px}
+.dl-header{text-align:center;margin-bottom:36px}
+.dl-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.dl-title{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,34px);color:var(--navy);margin-bottom:8px}
+.dl-sub{color:var(--muted);font-size:14.5px}
+.dl-modules{display:flex;flex-direction:column;gap:22px}
+.dl-mod{border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--sh-sm)}
+.dl-mod-head{background:linear-gradient(135deg,var(--navy),var(--navy-lt));color:white;
+  padding:14px 26px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px}
+.dl-table{width:100%;border-collapse:collapse}
+.dl-table thead{background:var(--off)}
+.dl-table th{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;
+  font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left}
+.dl-table td{padding:13px 18px;border-bottom:1px solid var(--border-lt);font-size:13.5px}
+.dl-table tr:last-child td{border-bottom:none}
+.dl-table tr:hover td{background:var(--off)}
+.dl-btn{display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,var(--teal-lt),#ccfbf1);
+  border:1px solid var(--teal-md);border-radius:10px;padding:6px 12px;
+  text-decoration:none;font-weight:700;font-size:12.5px;color:var(--teal-dark);
+  transition:background .2s,transform .15s,box-shadow .15s}
+.dl-btn:hover{background:var(--teal);color:white;transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,.3)}
+
+/* ── CONTACT ── */
+.contact-content{max-width:860px;margin:0 auto;padding:72px 60px}
+.contact-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+.contact-method{background:var(--white);border:1px solid var(--border);border-radius:20px;
+  padding:28px 22px;text-align:center;box-shadow:var(--sh-sm);
+  transition:transform .2s,box-shadow .2s,border-color .2s}
+.contact-method:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--teal-md)}
+.contact-emoji{font-size:30px;display:block;margin-bottom:12px}
+.contact-method h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.contact-method p{font-size:13px;color:var(--muted);line-height:1.65}
+.contact-method a{color:var(--teal);text-decoration:none;font-weight:600}
+.contact-note{margin-top:36px;background:var(--teal-lt);border:1px solid var(--teal-md);
+  border-radius:16px;padding:20px 26px;text-align:center;color:var(--teal-deeper);font-size:14px;line-height:1.7}
+
+/* ── PROFILE ── */
+.profile-wrap{max-width:900px;margin:0 auto;padding:48px 60px}
+.profile-top{display:grid;grid-template-columns:280px 1fr;gap:32px;margin-bottom:40px;align-items:start}
+.profile-card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:32px 24px;text-align:center;box-shadow:var(--sh-sm)}
+.profile-avatar{width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),var(--teal-darker,#134e4a));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;color:white;margin:0 auto 16px;
+  box-shadow:0 8px 20px rgba(13,148,136,.3)}
+.profile-name{font-family:'Fraunces',serif;font-size:22px;color:var(--navy);margin-bottom:4px}
+.profile-role{font-size:13px;color:var(--muted);margin-bottom:20px}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.pstat{background:var(--off);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.pstat-num{font-family:'Fraunces',serif;font-size:24px;color:var(--teal);font-weight:700}
+.pstat-label{font-size:11px;color:var(--muted);margin-top:2px}
+.profile-details{display:flex;flex-direction:column;gap:20px}
+.profile-section-title{font-family:'Fraunces',serif;font-size:18px;color:var(--navy);margin-bottom:14px}
+.progress-list{display:flex;flex-direction:column;gap:14px}
+.prog-item{background:var(--off);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+.prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.prog-name{font-weight:600;font-size:14px;color:var(--navy)}
+.prog-pct{font-size:13px;font-weight:700;color:var(--teal)}
+.prog-bar-wrap{height:8px;background:var(--border);border-radius:8px;overflow:hidden}
+.prog-bar{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--teal),var(--teal-md));transition:width .6s ease}
+.bookmarks-list{display:flex;flex-direction:column;gap:10px}
+.bookmark-item{background:var(--off);border:1px solid var(--border);border-radius:12px;
+  padding:13px 16px;display:flex;justify-content:space-between;align-items:center;
+  transition:border-color .2s}
+.bookmark-item:hover{border-color:var(--teal-md)}
+.bm-left{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--navy)}
+.bm-remove{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;
+  transition:color .2s;padding:0 4px}
+.bm-remove:hover{color:var(--danger)}
+
+/* ── STUDY TOOLS ── */
+.tools-wrap{max-width:1060px;margin:0 auto;padding:48px 60px}
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:32px}
+.tool-card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:var(--sh-sm)}
+.tool-card-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.tool-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-lt);
+  display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid var(--teal-md)}
+.tool-title{font-family:'Fraunces',serif;font-size:18px;color:var(--navy)}
+.tool-sub{font-size:12px;color:var(--muted)}
+
+/* Pomodoro */
+.pomodoro-display{text-align:center;padding:20px 0}
+.pom-circle{width:160px;height:160px;border-radius:50%;
+  background:conic-gradient(var(--teal) var(--pom-prog,100%), var(--border) 0);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  box-shadow:0 0 0 8px var(--teal-lt),var(--sh-teal);transition:background .1s}
+.pom-inner{width:130px;height:130px;border-radius:50%;background:var(--white);
+  display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pom-time{font-family:'Fraunces',serif;font-size:34px;color:var(--navy);font-weight:700}
+.pom-mode{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.pom-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.pom-btn{padding:8px 18px;border-radius:40px;border:none;font-weight:700;font-size:13px;
+  cursor:pointer;font-family:inherit;transition:.2s}
+.pom-btn-primary{background:var(--teal);color:white;box-shadow:var(--sh-teal)}
+.pom-btn-primary:hover{background:var(--teal-dark)}
+.pom-btn-secondary{background:var(--off);color:var(--muted);border:1px solid var(--border)}
+.pom-btn-secondary:hover{border-color:var(--teal);color:var(--teal)}
+.pom-sessions{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+/* Flashcards */
+.flashcard-area{perspective:1000px}
+.flashcard{width:100%;height:180px;border-radius:18px;cursor:pointer;
+  transform-style:preserve-3d;transition:transform .5s;position:relative}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:18px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:20px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc-front{background:linear-gradient(135deg,var(--navy),var(--navy-lt));color:white;border:1px solid var(--border)}
+.fc-back{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;transform:rotateY(180deg)}
+.fc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.6;margin-bottom:8px}
+.fc-text{font-family:'Fraunces',serif;font-size:17px;text-align:center;line-height:1.5}
+.fc-hint{font-size:11px;opacity:.6;margin-top:8px}
+.fc-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.fc-counter{font-size:13px;color:var(--muted);font-weight:600}
+.fc-btns{display:flex;gap:8px}
+
+/* Progress Tracker */
+.tracker-modules{display:flex;flex-direction:column;gap:16px}
+.tracker-mod{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:16px 18px}
+.tracker-mod-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.tracker-mod-name{font-weight:700;font-size:14px;color:var(--navy)}
+.tracker-pct{font-size:13px;font-weight:700;color:var(--teal)}
+.tracker-topics{display:flex;flex-direction:column;gap:8px}
+.tracker-topic{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);cursor:pointer;padding:4px 0}
+.tracker-topic input[type=checkbox]{width:16px;height:16px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.tracker-topic.done{color:var(--teal-dark);text-decoration:line-through;opacity:.7}
+.tracker-prog-wrap{height:6px;background:var(--border);border-radius:6px;overflow:hidden;margin-top:10px}
+.tracker-prog{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--teal),var(--teal-md));transition:width .4s}
+
+/* Exam Countdown */
+.countdown-wrap{text-align:center}
+.countdown-date-input{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.countdown-date-input label{font-size:13px;font-weight:600;color:var(--navy);text-align:left}
+.countdown-date-input input{padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-family:inherit;color:var(--text);background:var(--off)}
+.countdown-display{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.cd-unit{background:linear-gradient(135deg,var(--navy),var(--navy-lt));border-radius:16px;padding:16px 8px;color:white;text-align:center}
+.cd-num{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:white}
+.cd-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;opacity:.6;margin-top:4px}
+.cd-exam-name{font-family:'Fraunces',serif;font-size:16px;color:var(--navy);margin-bottom:4px}
+.cd-past{color:var(--teal);font-size:14px;font-weight:600;margin-top:12px}
+
+/* Quiz */
+.quiz-wrap{max-width:680px;margin:0 auto}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.quiz-mod-select{padding:8px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--off);cursor:pointer}
+.quiz-progress-bar{height:6px;background:var(--border);border-radius:6px;margin-bottom:24px;overflow:hidden}
+.quiz-prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal-md));border-radius:6px;transition:width .4s}
+.quiz-q{font-family:'Fraunces',serif;font-size:20px;color:var(--navy);line-height:1.4;margin-bottom:24px}
+.quiz-opts{display:flex;flex-direction:column;gap:12px}
+.quiz-opt{padding:14px 18px;border:1.5px solid var(--border);border-radius:14px;
+  cursor:pointer;font-size:14px;font-weight:500;color:var(--text);
+  background:var(--white);transition:border-color .2s,background .2s,transform .15s;text-align:left;font-family:inherit}
+.quiz-opt:hover:not(:disabled){border-color:var(--teal);background:var(--teal-lt);transform:translateX(4px)}
+.quiz-opt.correct{border-color:var(--success)!important;background:var(--success-lt)!important;color:var(--success)}
+.quiz-opt.wrong{border-color:var(--danger)!important;background:var(--danger-lt)!important;color:var(--danger)}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{margin-top:14px;padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:600}
+.quiz-feedback.correct{background:var(--success-lt);color:var(--success)}
+.quiz-feedback.wrong{background:var(--danger-lt);color:var(--danger)}
+.quiz-nav{margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+.quiz-score{text-align:center;padding:40px 20px}
+.quiz-score-num{font-family:'Fraunces',serif;font-size:64px;color:var(--teal);font-weight:700;line-height:1}
+.quiz-score-label{font-size:14px;color:var(--muted);margin-top:8px}
+
+/* ── EXAM TIPS ── */
+.tips-wrap{max-width:900px;margin:0 auto;padding:48px 60px}
+.tips-filter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;justify-content:center}
+.tip-filter-btn{padding:7px 18px;border-radius:40px;border:1.5px solid var(--border);
+  background:var(--white);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:.2s}
+.tip-filter-btn:hover,.tip-filter-btn.active{background:var(--teal);color:white;border-color:var(--teal)}
+.tips-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.tip-card{background:var(--white);border:1px solid var(--border);border-radius:20px;
+  padding:24px;box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s,border-color .2s}
+.tip-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--teal-md)}
+.tip-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.tip-badge.general{background:var(--teal-lt);color:var(--teal)}
+.tip-badge.appdev{background:#ede9fe;color:#7c3aed}
+.tip-badge.ictfund{background:#fef3c7;color:#b45309}
+.tip-badge.webdev{background:#fee2e2;color:#dc2626}
+.tip-card h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.tip-card p{font-size:13.5px;color:var(--muted);line-height:1.75}
+
+/* ── VIDEO RESOURCES ── */
+.videos-wrap{max-width:1000px;margin:0 auto;padding:48px 60px}
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.video-card{background:var(--white);border:1px solid var(--border);border-radius:18px;
+  overflow:hidden;box-shadow:var(--sh-sm);transition:transform .2s,box-shadow .2s}
+.video-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.video-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,var(--navy),var(--navy-lt));
+  display:flex;align-items:center;justify-content:center;font-size:40px;
+  text-decoration:none;position:relative;overflow:hidden}
+.video-thumb::after{content:'▶';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:36px;color:white;
+  background:rgba(0,0,0,.25);opacity:0;transition:opacity .2s}
+.video-card:hover .video-thumb::after{opacity:1}
+.video-info{padding:14px 16px}
+.video-module{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--teal);margin-bottom:5px}
+.video-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.4}
+.video-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.video-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  color:var(--teal);text-decoration:none;margin-top:8px}
+.video-link:hover{text-decoration:underline}
+
+/* ── ANNOUNCEMENTS ── */
+.announce-wrap{max-width:860px;margin:0 auto;padding:24px 60px 48px}
+.announce-card{background:var(--white);border:1px solid var(--border);border-radius:18px;
+  padding:20px 24px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--sh-sm);
+  margin-bottom:14px;transition:border-color .2s}
+.announce-card:hover{border-color:var(--teal-md)}
+.announce-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;flex-shrink:0}
+.announce-icon.info{background:var(--info-lt)}
+.announce-icon.success{background:var(--success-lt)}
+.announce-icon.warn{background:var(--warn-lt)}
+.announce-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.announce-title{font-weight:700;font-size:14.5px;color:var(--navy);margin-bottom:4px}
+.announce-body{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* ── ADMIN ── */
+.admin-wrap{max-width:1100px;margin:0 auto;padding:48px 60px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:40px}
+.admin-stat{background:var(--white);border:1px solid var(--border);border-radius:18px;
+  padding:22px 20px;box-shadow:var(--sh-sm)}
+.admin-stat-num{font-family:'Fraunces',serif;font-size:36px;color:var(--teal);font-weight:700;margin-bottom:4px}
+.admin-stat-label{font-size:12.5px;color:var(--muted);font-weight:600}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.admin-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:24px;box-shadow:var(--sh-sm)}
+.admin-card-title{font-family:'Fraunces',serif;font-size:16px;color:var(--navy);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.user-list{display:flex;flex-direction:column;gap:10px;max-height:280px;overflow-y:auto}
+.user-item{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:var(--off);border-radius:10px;border:1px solid var(--border)}
+.user-item-name{font-weight:600;font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.user-badge{font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700}
+.badge-admin{background:#fef3c7;color:#b45309}
+.badge-student{background:var(--teal-lt);color:var(--teal)}
+.user-date{font-size:11px;color:var(--muted)}
+.feedback-list-admin{display:flex;flex-direction:column;gap:10px;max-height:280px;overflow-y:auto}
+.fb-item{background:var(--off);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.fb-item-user{font-size:11px;font-weight:700;color:var(--teal);margin-bottom:4px}
+.fb-item-msg{font-size:13px;color:var(--muted);line-height:1.6}
+.fb-item-date{font-size:11px;color:var(--border);margin-top:4px}
+.resource-form{display:flex;flex-direction:column;gap:14px}
+.resource-form input,.resource-form select{padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--off);color:var(--text);padding-left:13px}
+.resource-form input:focus,.resource-form select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.announce-form{display:flex;flex-direction:column;gap:12px}
+.announce-form input,.announce-form select,.announce-form textarea{
+  padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;
+  font-size:13px;font-family:inherit;background:var(--off);color:var(--text)}
+.announce-form textarea{min-height:80px;resize:vertical}
+.announce-form input:focus,.announce-form select:focus,.announce-form textarea:focus{outline:none;border-color:var(--teal)}
+.submit-btn{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;
+  border:none;padding:10px 20px;border-radius:40px;font-weight:700;font-size:13px;
+  cursor:pointer;box-shadow:var(--sh-teal);font-family:inherit;transition:.2s;align-self:flex-start}
+.submit-btn:hover{transform:translateY(-1px)}
+.delete-btn{background:none;border:none;cursor:pointer;color:var(--danger);font-size:14px;padding:2px 6px;border-radius:6px;transition:.2s}
+.delete-btn:hover{background:var(--danger-lt)}
+
+/* ── SEARCH ── */
+.search-bar-wrap{max-width:600px;margin:0 auto 36px;position:relative}
+.search-bar{width:100%;padding:14px 14px 14px 46px;border:2px solid var(--border);border-radius:16px;
+  font-size:15px;font-family:inherit;background:var(--white);color:var(--text);
+  transition:border-color .2s,box-shadow .2s}
+.search-bar:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+.search-results{display:flex;flex-direction:column;gap:12px}
+.search-result-item{background:var(--white);border:1px solid var(--border);border-radius:14px;
+  padding:14px 18px;cursor:pointer;transition:border-color .2s,transform .15s}
+.search-result-item:hover{border-color:var(--teal);transform:translateX(4px)}
+.sr-module{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--teal);margin-bottom:4px}
+.sr-title{font-weight:700;font-size:14px;color:var(--navy)}
+.sr-snippet{font-size:13px;color:var(--muted);margin-top:3px}
+.search-empty{text-align:center;padding:40px;color:var(--muted);font-size:15px}
+
+/* ── FEEDBACK / MODAL ── */
+.feedback-btn{position:fixed;bottom:26px;right:26px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+  color:white;border:none;border-radius:60px;padding:13px 20px;
+  font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:var(--sh-teal);
+  z-index:300;transition:transform .2s,box-shadow .2s;font-family:inherit;
+  display:flex;align-items:center;gap:8px}
+.feedback-btn:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 12px 28px rgba(13,148,136,.4)}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(15,39,68,.5);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;z-index:400}
+.modal-content{background:var(--white);max-width:500px;width:90%;border-radius:28px;
+  overflow:hidden;animation:slideUp .35s cubic-bezier(.16,1,.3,1) both;box-shadow:var(--sh-lg)}
+.modal-header{background:linear-gradient(135deg,var(--navy),var(--navy-lt));padding:22px 26px;
+  color:white;display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-family:'Fraunces',serif;font-size:20px}
+.modal-header p{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:3px}
+.close-modal{font-size:22px;cursor:pointer;color:rgba(255,255,255,.7);
+  transition:color .2s;background:none;border:none;font-family:inherit}
+.close-modal:hover{color:white}
+.modal-body{padding:26px}
+.feedback-form textarea{width:100%;min-height:110px;padding:13px;border:1.5px solid var(--border);
+  border-radius:14px;font-size:14px;font-family:inherit;resize:vertical;background:var(--off);
+  color:var(--text);margin-bottom:14px;transition:border-color .2s,box-shadow .2s}
+.feedback-form textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.feedback-submit{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;
+  border:none;padding:11px 22px;border-radius:40px;font-weight:700;font-size:13.5px;
+  cursor:pointer;box-shadow:var(--sh-teal);font-family:inherit;transition:transform .2s}
+.feedback-submit:hover{transform:translateY(-1px)}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;top:78px;right:22px;z-index:500;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:13px 16px;
+  display:flex;align-items:center;gap:11px;box-shadow:var(--sh-lg);min-width:270px;
+  animation:slideLeft .4s cubic-bezier(.16,1,.3,1) both;font-size:13.5px;font-weight:500;
+  color:var(--text);pointer-events:all}
+.toast.toast-success{border-left:4px solid var(--teal)}
+.toast.toast-error{border-left:4px solid var(--danger)}
+.toast.toast-info{border-left:4px solid var(--info)}
+.toast-icon{font-size:17px;flex-shrink:0}
+.toast-dismiss{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:17px;padding:0}
+
+/* ── FOOTER ── */
+footer{background:linear-gradient(135deg,var(--navy),var(--navy-lt));color:rgba(255,255,255,.5);
+  padding:36px 60px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-mark{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px;color:white}
+.footer-brand-text{font-size:13px;font-weight:600;color:rgba(255,255,255,.8)}
+.footer-right{font-size:12px}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 18px}
+  .hero{grid-template-columns:1fr;padding:72px 22px 52px;gap:36px}
+  .steps,.modules-grid{grid-template-columns:1fr}
+  .offer-strip{padding:16px 22px;gap:16px}
+  .section{padding:52px 22px}
+  .page-hero{padding:56px 22px 38px}
+  .content{padding:52px 22px}
+  .q-block{grid-template-columns:1fr;gap:28px}
+  .contact-methods{grid-template-columns:1fr}
+  .contact-content{padding:52px 22px}
+  .tools-grid{grid-template-columns:1fr}
+  .admin-stats{grid-template-columns:repeat(2,1fr)}
+  .admin-grid{grid-template-columns:1fr}
+  .profile-top{grid-template-columns:1fr}
+  .tips-grid{grid-template-columns:1fr}
+  .video-grid{grid-template-columns:1fr}
+  .profile-wrap,.tools-wrap,.tips-wrap,.videos-wrap,.admin-wrap,.announce-wrap{padding:40px 22px}
+  footer{padding:26px 22px;flex-direction:column;text-align:center}
+  .module-header,.module-body,.module-tags{padding-left:18px;padding-right:18px}
+  .dl-table th:nth-child(2),.dl-table td:nth-child(2){display:none}
+  .countdown-display{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-brand" id="brandHome">
+    <div class="brand-mark">ITB</div>
+    <div class="brand-name">Intellectual Tech Bridge <small>Student Resource Portal</small></div>
+  </a>
+  <div class="nav-links" id="dynamicNav"></div>
+</nav>
+
+<!-- ════════════════════════════════ HOME ════════════════════════════════ -->
+<section id="home-section" class="page-section">
+  <!-- Announcements Banner -->
+  <div id="homeBanner" style="background:linear-gradient(90deg,var(--teal-lt),#ccfbf1);border-bottom:1px solid var(--teal-md);padding:10px 60px;display:none;align-items:center;justify-content:space-between;gap:12px">
+    <div id="bannerText" style="font-size:13.5px;font-weight:600;color:var(--teal-deeper);display:flex;align-items:center;gap:8px"></div>
+    <button onclick="document.getElementById('homeBanner').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px">×</button>
+  </div>
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-chip">🎓 Free for All Students</div>
+      <h1>Your Academic<br/><em>Success Starts Here</em></h1>
+      <p class="hero-desc"><strong>Intellectual Tech Bridge</strong> is a free online platform built for university ICT and Technology students. Past exam papers, study notes, textbooks, exam tips, and tutor support — all in one place, available 24/7.</p>
+      <div class="hero-actions">
+        <a href="#" data-page="modules" class="btn btn-primary">📚 Browse Modules</a>
+        <a href="#" data-page="tools" class="btn btn-outline">🛠 Study Tools</a>
+        <a href="#" data-page="about" class="btn btn-outline">Learn About Us →</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="h-card"><div class="h-card-icon">📚</div><div><div class="h-card-title">Everything in one place</div><div class="h-card-desc">Past papers, notes, textbooks and exam tips — no more searching.</div></div></div>
+        <div class="h-card"><div class="h-card-icon">🛠</div><div><div class="h-card-title">Built-in Study Tools</div><div class="h-card-desc">Pomodoro timer, flashcards, quizzes, progress tracker & exam countdown.</div></div></div>
+        <div class="h-card"><div class="h-card-icon">💡</div><div><div class="h-card-title">Exam Tips & Video Resources</div><div class="h-card-desc">Curated tips and video links per module to reinforce your understanding.</div></div></div>
+        <div class="h-card"><div class="h-card-icon">🤝</div><div><div class="h-card-title">Tutor Support</div><div class="h-card-desc">Get guidance from knowledgeable tutors on difficult topics.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="offer-strip">
+    <div class="offer-item"><div class="offer-dot"></div>100% Free</div>
+    <div class="offer-item"><div class="offer-dot"></div>Study Tools Built-in</div>
+    <div class="offer-item"><div class="offer-dot"></div>Available 24/7</div>
+    <div class="offer-item"><div class="offer-dot"></div>ICT & Tech Focused</div>
+    <div class="offer-item"><div class="offer-dot"></div>Dark Mode</div>
+    <div class="offer-item"><div class="offer-dot"></div>Access Anywhere</div>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">Get your study resources in 3 simple steps</h2>
+      <p class="section-sub">Everything you need to prepare for exams is right here — free, organised and easy to use.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Choose Your Module</h3><p>Browse our three ICT modules — Applications Development, ICT Fundamentals, and Web Development.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Download Resources</h3><p>Download past exam papers, study notes, textbooks and memorandums directly to your device for free.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Study & Succeed</h3><p>Use the built-in tools — flashcards, timer, quizzes — to study smarter and hit your targets.</p></div>
+    </div>
+  </div>
+  <div style="background:var(--off);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="section">
+      <div class="section-header">
+        <p class="section-label">Our Modules</p>
+        <h2 class="section-title">Subjects we cover</h2>
+        <p class="section-sub">Three core ICT modules with comprehensive resources available for free download.</p>
+      </div>
+      <div class="modules-grid">
+        <div class="mod-card"><div class="mod-icon-badge">💻</div><h3>Applications Development</h3><p>Variables, algorithms, decision-making, loops and programming problem-solving.</p><a href="#" data-page="modules" class="mod-link">View resources →</a></div>
+        <div class="mod-card"><div class="mod-icon-badge">🌐</div><h3>ICT Fundamentals</h3><p>Hardware, software, networks, internet, data management and digital communication.</p><a href="#" data-page="modules" class="mod-link">View resources →</a></div>
+        <div class="mod-card"><div class="mod-icon-badge">🖥️</div><h3>Web Development</h3><p>HTML, web pages, text & images, navigation, links and web projects.</p><a href="#" data-page="modules" class="mod-link">View resources →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ ABOUT ════════════════════════════════ -->
+<section id="about-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">About Us</p>
+    <h1>Welcome to<br/><em>Intellectual Tech Bridge</em></h1>
+    <p>A free, student-first platform built to support ICT and Technology learners with everything they need to succeed.</p>
+  </div>
+  <div class="content">
+    <div class="q-block">
+      <div class="q-text">
+        <p class="q-label">What Is ITB?</p>
+        <h2>A platform built for ICT students</h2>
+        <p><strong>Intellectual Tech Bridge</strong> is designed to assist university students studying ICT and Technology. We provide past exam papers, learning modules, and a wide range of study resources — all under one roof, free of charge.</p>
+        <p>The website helps students prepare for tests and examinations, reinforcing key concepts and improving academic performance. Our platform is well-structured, allowing students to quickly find the materials they need, whenever they need them.</p>
+        <p>With new features like built-in study tools, exam tips, video resources, quizzes and progress tracking, ITB is more than just a download site — it's a complete study companion.</p>
+      </div>
+      <div class="q-panel">
+        <div class="panel-item"><div class="panel-emoji">✅</div><div><div class="panel-title">100% Free Access</div><div class="panel-desc">All resources and tools are available at no cost — no subscriptions, no hidden fees.</div></div></div>
+        <div class="panel-item"><div class="panel-emoji">🕐</div><div><div class="panel-title">Available 24/7</div><div class="panel-desc">Access materials anytime, anywhere — study on your own schedule.</div></div></div>
+        <div class="panel-item"><div class="panel-emoji">🛠</div><div><div class="panel-title">Study Tools Built In</div><div class="panel-desc">Pomodoro timer, flashcards, quizzes, countdown and progress tracker included.</div></div></div>
+        <div class="panel-item"><div class="panel-emoji">🎯</div><div><div class="panel-title">ICT Focused</div><div class="panel-desc">Built specifically for ICT and Technology students, not a generic platform.</div></div></div>
+      </div>
+    </div>
+    <div class="goal-banner">
+      <h2>Our goal — see <em>every student succeed</em></h2>
+      <p>We want to see every student achieve their academic goals with all the support and resources they receive from <strong>Intellectual Tech Bridge</strong>. With the right tools, every student has what it takes to excel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ MODULES ════════════════════════════════ -->
+<section id="modules-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Study Resources</p>
+    <h1>Modules &amp; <em>Downloads</em></h1>
+    <p>Explore module descriptions, then download past papers, notes, textbooks and memorandums — all free.</p>
+  </div>
+  <div class="content">
+    <div class="modules-list">
+      <div class="module-card">
+        <div class="module-header"><div class="mod-icon-wrap">💻</div><div><h2>Applications Development</h2><p>Programming fundamentals and software problem-solving</p></div></div>
+        <div class="module-body"><p><strong>Applications Development</strong> focuses on how computer programs and software applications are created. It introduces students to the fundamental concepts of programming and how technology can be used to develop solutions for real-world problems.</p><p>Core topics include <strong>variables, algorithms, decision-making, logic operators and loops</strong> — the essential building blocks of any programming language.</p></div>
+        <div class="module-tags"><span class="tag">Variables</span><span class="tag">Algorithms</span><span class="tag">Loops</span><span class="tag">Logic Operators</span><span class="tag">Decision-Making</span><span class="tag">Problem Solving</span></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><div class="mod-icon-wrap">🌐</div><div><h2>ICT Fundamentals</h2><p>Core concepts in Information and Communication Technology</p></div></div>
+        <div class="module-body"><p><strong>ICT Fundamentals</strong> walks students through the core ideas behind Information and Communication Technology — how data is generated, stored and transmitted across digital platforms.</p><p>The module covers <strong>hardware and software</strong>, networking, the Internet and communication tools including email and browsing techniques.</p></div>
+        <div class="module-tags"><span class="tag">Hardware</span><span class="tag">Software</span><span class="tag">Networking</span><span class="tag">Internet</span><span class="tag">Email Systems</span><span class="tag">Data Management</span></div>
+      </div>
+      <div class="module-card">
+        <div class="module-header"><div class="mod-icon-wrap">🖥️</div><div><h2>Web Development</h2><p>Building and publishing websites on the Internet</p></div></div>
+        <div class="module-body"><p><strong>Web Development</strong> helps students learn how websites are created and used. Students learn how to place and organise information on a webpage — working with <strong>text, images and links</strong> so that content is clear and easy to navigate.</p><p>Web Development gives students digital skills that are highly relevant in today's world and is an excellent starting point for anyone interested in a technology career.</p></div>
+        <div class="module-tags"><span class="tag">HTML</span><span class="tag">Web Pages</span><span class="tag">Text &amp; Images</span><span class="tag">Navigation</span><span class="tag">Links</span><span class="tag">Web Projects</span></div>
+      </div>
+    </div>
+    <div class="dl-section">
+      <div class="dl-header">
+        <p class="dl-label">Download Centre</p>
+        <h2 class="dl-title">Question Papers, Notes &amp; Textbooks</h2>
+        <p class="dl-sub">Download all resources for free — available anytime, anywhere.</p>
+      </div>
+      <div class="dl-modules">
+        <div class="dl-mod">
+          <div class="dl-mod-head"><span>💻</span> Applications Development</div>
+          <table class="dl-table">
+            <thead><tr><th>Resource</th><th>Description</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Question Paper</strong></td><td>Past exam question paper</td><td><a href="APP DEVELOPMENT PAST PAPER .pdf" class="dl-btn" onclick="trackDownload('App Dev - Question Paper')">📄 Download</a></td></tr>
+              <tr><td><strong>Memorandum</strong></td><td>Marking memorandum & model answers</td><td><a href="APPLICATION DEVELOPMENT MEMO.pdf" class="dl-btn" onclick="trackDownload('App Dev - Memo')">📋 Download</a></td></tr>
+              <tr><td><strong>Study Notes</strong></td><td>Comprehensive notes covering all key topics</td><td><a href="Applications Development" class="dl-btn" onclick="trackDownload('App Dev - Notes')">📝 Download</a></td></tr>
+              <tr><td><strong>Textbook</strong></td><td>Basic Principles of Programming</td><td><a href="c:\Users\Admin\Desktop\Intellectual Tech Bridge\Website\toaz.info-basic-principles-of-programmingtextbookpdf-pr_1ec6876e7008ad44c2a6af9ff9d5f0d1.pdf" class="dl-btn" onclick="trackDownload('App Dev - Textbook')">📖 Download</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dl-mod">
+          <div class="dl-mod-head"><span>🌐</span> ICT Fundamentals</div>
+          <table class="dl-table">
+            <thead><tr><th>Resource</th><th>Description</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Question Paper</strong></td><td>Past exam question paper</td><td><a href="ICT FUNDAMENTALS PAST EXAM PAPER .pdf" class="dl-btn" onclick="trackDownload('ICT - Question Paper')">📄 Download</a></td></tr>
+              <tr><td><strong>Memorandum</strong></td><td>Marking memorandum & model answers</td><td><a href="ICT FUNDAMENTALS MEMO .pdf" class="dl-btn" onclick="trackDownload('ICT - Memo')">📋 Download</a></td></tr>
+              <tr><td><strong>Study Notes</strong></td><td>Comprehensive notes covering all topics</td><td><a href="ICT fundamentals" class="dl-btn" onclick="trackDownload('ICT - Notes')">📝 Download</a></td></tr>
+              <tr><td><strong>Textbook</strong></td><td>Cambridge IGCSE ICT Study & Revision Guide</td><td><a href="C:\Users\Admin\Desktop\Intellectual Tech Bridge\Website\1772954088000__OceanofPDF.com_Cambridge_IGCSE_ICT_Study_and_Revision_Guide_Study_Guide_-_Graham_Brown_and_David_Watson .pdf" class="dl-btn" onclick="trackDownload('ICT - Textbook')">📖 Download</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dl-mod">
+          <div class="dl-mod-head"><span>🖥️</span> Web Development</div>
+          <table class="dl-table">
+            <thead><tr><th>Resource</th><th>Description</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Question Paper</strong></td><td>Past exam question paper</td><td><a href="WEB DEVELOPMENT PAST PAPER .pdf" class="dl-btn" onclick="trackDownload('Web Dev - Question Paper')">📄 Download</a></td></tr>
+              <tr><td><strong>Memorandum</strong></td><td>Marking memorandum & model answers</td><td><a href="WEB DEVELOPMENT MEMO.pdf" class="dl-btn" onclick="trackDownload('Web Dev - Memo')">📋 Download</a></td></tr>
+              <tr><td><strong>Study Notes</strong></td><td>Comprehensive notes covering all topics</td><td><a href="Web development" class="dl-btn" onclick="trackDownload('Web Dev - Notes')">📝 Download</a></td></tr>
+              <tr><td><strong>Textbook</strong></td><td>Web Design Introductory — recommended</td><td><a href="C:\Users\Admin\Desktop\Intellectual Tech Bridge\Website\web-design-introductory-6th-edition-pdf-free (1).pdf"class="dl-btn" onclick="trackDownload('Web Dev - Textbook')">📖 Download</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ STUDY TOOLS ════════════════════════════════ -->
+<section id="tools-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Study Tools</p>
+    <h1>Built-in <em>Study Tools</em></h1>
+    <p>Everything you need to study smarter — timers, flashcards, quizzes, progress tracking and exam countdown.</p>
+  </div>
+  <div class="tools-wrap">
+    <div class="tools-grid">
+
+      <!-- POMODORO -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">⏱</div>
+          <div><div class="tool-title">Pomodoro Timer</div><div class="tool-sub">Focus in 25-min sessions, break in 5</div></div>
+        </div>
+        <div class="pomodoro-display">
+          <div class="pom-circle" id="pomCircle" style="--pom-prog:100%">
+            <div class="pom-inner">
+              <div class="pom-time" id="pomTime">25:00</div>
+              <div class="pom-mode" id="pomMode">Focus</div>
+            </div>
+          </div>
+          <div class="pom-controls">
+            <button class="pom-btn pom-btn-primary" id="pomStart" onclick="pomToggle()">▶ Start</button>
+            <button class="pom-btn pom-btn-secondary" onclick="pomReset()">↺ Reset</button>
+            <button class="pom-btn pom-btn-secondary" onclick="pomSwitch()">☕ Break</button>
+          </div>
+          <div class="pom-sessions" id="pomSessions">Sessions completed: 0</div>
+        </div>
+      </div>
+
+      <!-- FLASHCARDS -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">🃏</div>
+          <div><div class="tool-title">Flashcards</div><div class="tool-sub">Click card to flip — test your knowledge</div></div>
+        </div>
+        <div style="margin-bottom:12px">
+          <select id="fcModuleSelect" onchange="loadFlashcards()" style="padding:7px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;color:var(--text);background:var(--off);cursor:pointer;width:100%">
+            <option value="appdev">💻 Applications Development</option>
+            <option value="ictfund">🌐 ICT Fundamentals</option>
+            <option value="webdev">🖥️ Web Development</option>
+          </select>
+        </div>
+        <div class="flashcard-area">
+          <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="fc-face fc-front">
+              <div class="fc-label">Question</div>
+              <div class="fc-text" id="fcFront">Loading...</div>
+              <div class="fc-hint">Click to reveal answer</div>
+            </div>
+            <div class="fc-face fc-back">
+              <div class="fc-label">Answer</div>
+              <div class="fc-text" id="fcBack">...</div>
+            </div>
+          </div>
+        </div>
+        <div class="fc-nav">
+          <div class="fc-counter" id="fcCounter">1 / 1</div>
+          <div class="fc-btns">
+            <button class="pom-btn pom-btn-secondary btn-sm" onclick="prevCard()">← Prev</button>
+            <button class="pom-btn pom-btn-primary btn-sm" onclick="nextCard()">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">📊</div>
+          <div><div class="tool-title">Progress Tracker</div><div class="tool-sub">Mark topics as studied and track completion</div></div>
+        </div>
+        <div class="tracker-modules" id="trackerModules"></div>
+      </div>
+
+      <!-- EXAM COUNTDOWN -->
+      <div class="tool-card">
+        <div class="tool-card-header">
+          <div class="tool-icon">📅</div>
+          <div><div class="tool-title">Exam Countdown</div><div class="tool-sub">Set your exam date and track time remaining</div></div>
+        </div>
+        <div class="countdown-wrap">
+          <div class="countdown-date-input">
+            <label>Exam name</label>
+            <div class="input-wrap"><span class="input-icon">✏️</span><input type="text" id="examName" placeholder="e.g. Applications Development Final" style="padding-left:38px"></div>
+            <label>Exam date</label>
+            <div class="input-wrap"><span class="input-icon">📅</span><input type="date" id="examDate" onchange="updateCountdown()" style="padding-left:38px"></div>
+          </div>
+          <div id="countdownDisplay" class="countdown-display" style="display:none">
+            <div class="cd-unit"><div class="cd-num" id="cdDays">0</div><div class="cd-label">Days</div></div>
+            <div class="cd-unit"><div class="cd-num" id="cdHours">0</div><div class="cd-label">Hours</div></div>
+            <div class="cd-unit"><div class="cd-num" id="cdMins">0</div><div class="cd-label">Minutes</div></div>
+            <div class="cd-unit"><div class="cd-num" id="cdSecs">0</div><div class="cd-label">Seconds</div></div>
+          </div>
+          <div id="countdownPast" style="display:none" class="cd-past">🎉 This exam date has passed!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="tool-card" style="margin-bottom:28px">
+      <div class="tool-card-header">
+        <div class="tool-icon">🧠</div>
+        <div><div class="tool-title">Module Quiz</div><div class="tool-sub">Test your knowledge with multiple-choice questions</div></div>
+      </div>
+      <div class="quiz-wrap" id="quizWrap">
+        <div class="quiz-header">
+          <select class="quiz-mod-select" id="quizModSelect" onchange="startQuiz()">
+            <option value="appdev">💻 Applications Development</option>
+            <option value="ictfund">🌐 ICT Fundamentals</option>
+            <option value="webdev">🖥️ Web Development</option>
+          </select>
+          <button class="pom-btn pom-btn-secondary btn-sm" onclick="startQuiz()">↺ Restart</button>
+        </div>
+        <div class="quiz-progress-bar"><div class="quiz-prog-fill" id="quizProgFill" style="width:0%"></div></div>
+        <div id="quizBody"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ EXAM TIPS ════════════════════════════════ -->
+<section id="tips-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Study Support</p>
+    <h1>Exam Tips &amp; <em>Strategies</em></h1>
+    <p>Proven techniques to help you study smarter, understand concepts deeper and perform better in exams.</p>
+  </div>
+  <div class="tips-wrap">
+    <div class="tips-filter" id="tipsFilter">
+      <button class="tip-filter-btn active" data-filter="all" onclick="filterTips(this,'all')">All Tips</button>
+      <button class="tip-filter-btn" data-filter="general" onclick="filterTips(this,'general')">General</button>
+      <button class="tip-filter-btn" data-filter="appdev" onclick="filterTips(this,'appdev')">App Development</button>
+      <button class="tip-filter-btn" data-filter="ictfund" onclick="filterTips(this,'ictfund')">ICT Fundamentals</button>
+      <button class="tip-filter-btn" data-filter="webdev" onclick="filterTips(this,'webdev')">Web Development</button>
+    </div>
+    <div class="tips-grid" id="tipsGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ VIDEO RESOURCES ════════════════════════════════ -->
+<section id="videos-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Video Resources</p>
+    <h1>Learn by <em>Watching</em></h1>
+    <p>Curated YouTube tutorial links to help you understand module concepts visually and at your own pace.</p>
+  </div>
+  <div class="videos-wrap">
+    <div class="video-grid" id="videoGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ PROFILE ════════════════════════════════ -->
+<section id="profile-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">My Profile</p>
+    <h1>Your <em>Dashboard</em></h1>
+    <p>Track your study progress, manage bookmarks and view your activity on ITB.</p>
+  </div>
+  <div class="profile-wrap" id="profileWrap"></div>
+</section>
+
+<!-- ════════════════════════════════ SEARCH ════════════════════════════════ -->
+<section id="search-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Search</p>
+    <h1>Find <em>Resources</em></h1>
+    <p>Search across all modules, tips, and resources instantly.</p>
+  </div>
+  <div class="section">
+    <div class="search-bar-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-bar" id="searchInput" placeholder="Search modules, resources, tips..." oninput="doSearch()">
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ CONTACT ════════════════════════════════ -->
+<section id="contact-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Get in Touch</p>
+    <h1>We'd love to hear<br/><em>from you</em></h1>
+    <p>Questions, feedback, or need help? Reach out anytime — we typically reply within 24 hours.</p>
+  </div>
+  <div class="contact-content">
+    <div class="contact-methods">
+      <div class="contact-method"><span class="contact-emoji">📧</span><h3>Email Us</h3><p><a href="mailto:patiencemamello408@gmail.com">patiencemamello408@gmail.com</a><br/><span style="font-size:12px;color:var(--muted)">We reply within 24 hours</span></p></div>
+      <div class="contact-method"><span class="contact-emoji">📱</span><h3>Social Media</h3><p>@inteltechbridge<br/><span style="font-size:12px;color:var(--muted)">Twitter & Instagram</span></p></div>
+      <div class="contact-method"><span class="contact-emoji">🎥</span><h3>Virtual Office</h3><p>Online / Zoom<br/><span style="font-size:12px;color:var(--muted)">By appointment only</span></p></div>
+    </div>
+    <div class="contact-note">💡 <strong>All messages are read.</strong> Whether you have a suggestion, need help finding a past paper, or just want to say hello — we're here for you.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ ADMIN ════════════════════════════════ -->
+<section id="admin-section" class="page-section">
+  <div class="page-hero">
+    <p class="page-label">Admin Dashboard</p>
+    <h1>Manage <em>ITB</em></h1>
+    <p>View users, student feedback, post announcements and manage resources.</p>
+  </div>
+  <div class="admin-wrap" id="adminWrap"></div>
+</section>
+
+<!-- ════════════════════════════════ LOGIN ════════════════════════════════ -->
+<section id="login-section" class="page-section">
+  <div class="auth-wrapper">
+    <div class="auth-container">
+      <div class="auth-top-bar"></div>
+      <div class="auth-inner">
+        <div class="auth-logo"><div class="auth-logo-mark">ITB</div><div class="auth-logo-text">Intellectual Tech Bridge <small>Student Resource Portal</small></div></div>
+        <div class="auth-header"><h2>Welcome back 👋</h2><p>Log in to access all study resources and tools</p></div>
+        <form id="loginForm" class="auth-form">
+          <div class="input-group"><label>Username</label><div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username"></div></div>
+          <div class="input-group"><label>Password</label><div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password"></div></div>
+          <div id="loginMessage" style="display:none"></div>
+          <button type="submit" class="auth-btn">Log in →</button>
+        </form>
+        <div class="auth-footer">Don't have an account? <a href="#" id="gotoSignupFromLogin">Sign up</a><br/><span style="font-size:12px;color:var(--muted)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ SIGNUP ════════════════════════════════ -->
+<section id="signup-section" class="page-section">
+  <div class="auth-wrapper">
+    <div class="auth-container">
+      <div class="auth-top-bar"></div>
+      <div class="auth-inner">
+        <div class="auth-logo"><div class="auth-logo-mark">ITB</div><div class="auth-logo-text">Intellectual Tech Bridge <small>Student Resource Portal</small></div></div>
+        <div class="auth-header"><h2>Create account ✨</h2><p>Join for free and access all study resources</p></div>
+        <form id="signupForm" class="auth-form">
+          <div class="input-group"><label>Username</label><div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="signupUsername" placeholder="Choose a username" required autocomplete="username" minlength="3"></div></div>
+          <div class="input-group"><label>Password</label><div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="signupPassword" placeholder="Create a strong password" required autocomplete="new-password"></div><div class="pw-strength"><div class="pw-bar" id="pwBar"></div></div><div class="pw-label" id="pwLabel"></div></div>
+          <div class="input-group"><label>Confirm Password</label><div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="signupConfirm" placeholder="Repeat your password" required autocomplete="new-password"></div></div>
+          <div id="signupMessage" style="display:none"></div>
+          <button type="submit" class="auth-btn">Create account →</button>
+        </form>
+        <div class="auth-footer">Already have an account? <a href="#" id="gotoLoginFromSignup">Log in here</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand"><div class="footer-mark">ITB</div><div class="footer-brand-text">Intellectual Tech Bridge</div></div>
+  <div class="footer-right">A free academic resource portal for ICT & Technology students</div>
+</footer>
+
+<button class="feedback-btn" id="feedbackBtn">💬 Feedback</button>
+<div id="feedbackModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header"><div><h3>Share your thoughts</h3><p>Help us improve ITB for all students</p></div><button class="close-modal" id="closeModal">&times;</button></div>
+    <div class="modal-body">
+      <form id="feedbackForm" class="feedback-form">
+        <textarea id="feedbackText" placeholder="Tell us what you think, suggest improvements, or report an issue..."></textarea>
+        <button type="submit" class="feedback-submit">Send Feedback ✉️</button>
+        <div id="feedbackResult" style="margin-top:10px;font-size:13px"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════ DATA ════════════
+const FLASHCARD_DATA = {
+  appdev:[
+    {q:"What is an algorithm?",a:"A step-by-step set of instructions used to solve a problem or complete a task."},
+    {q:"What is a variable?",a:"A named storage location in memory used to hold a value that can change during program execution."},
+    {q:"What is a loop?",a:"A control structure that repeats a block of code multiple times until a condition is met."},
+    {q:"What is a conditional statement?",a:"A statement (like IF/ELSE) that executes different code depending on whether a condition is true or false."},
+    {q:"What is pseudocode?",a:"A plain-language description of the steps in an algorithm, written in a structured but non-code format."},
+    {q:"What is a logic operator?",a:"Operators like AND, OR, NOT used to combine or negate conditions in decision-making."},
+    {q:"What does 'input' mean in programming?",a:"Data received by a program from the user or another source (e.g. keyboard, file)."},
+    {q:"What is a function?",a:"A named, reusable block of code designed to perform a specific task."},
+  ],
+  ictfund:[
+    {q:"What is hardware?",a:"The physical components of a computer system — CPU, RAM, storage, keyboard, monitor, etc."},
+    {q:"What is software?",a:"Programs and operating information used by a computer — includes system software and application software."},
+    {q:"What is an operating system?",a:"System software that manages hardware resources and provides services for application software (e.g. Windows, Linux)."},
+    {q:"What is a network?",a:"A group of interconnected computers and devices that can share data and resources."},
+    {q:"What does ICT stand for?",a:"Information and Communication Technology."},
+    {q:"What is the Internet?",a:"A global network of interconnected computers that allows the sharing of information and communication worldwide."},
+    {q:"What is data?",a:"Raw facts and figures that have no meaning on their own until processed into information."},
+    {q:"What is cloud storage?",a:"Storing data on remote servers accessed via the internet rather than on local hardware."},
+  ],
+  webdev:[
+    {q:"What does HTML stand for?",a:"HyperText Markup Language — the standard language used to create and structure web pages."},
+    {q:"What is a tag in HTML?",a:"A keyword enclosed in angle brackets (e.g. <p>) used to define elements on a web page."},
+    {q:"What is the purpose of the <head> tag?",a:"It contains metadata about the document — title, links to stylesheets, scripts — not displayed on the page."},
+    {q:"What does the <a> tag do?",a:"Creates a hyperlink that links to another page or resource using the href attribute."},
+    {q:"What is CSS?",a:"Cascading Style Sheets — a language used to style and layout HTML elements (colours, fonts, spacing)."},
+    {q:"What is the <body> tag?",a:"Contains all the visible content of a web page — text, images, links, tables, etc."},
+    {q:"What is an attribute in HTML?",a:"Additional information added to an HTML tag, e.g. src in <img src='photo.jpg'>."},
+    {q:"What is a URL?",a:"Uniform Resource Locator — the address used to access a resource on the internet, e.g. https://google.com."},
+  ]
+};
+
+const QUIZ_DATA = {
+  appdev:[
+    {q:"What symbol is commonly used for assignment in pseudocode?",opts:["=","←","==",":="],a:1,exp:"The ← symbol is the standard assignment operator in pseudocode."},
+    {q:"Which loop is guaranteed to execute at least once?",opts:["FOR loop","WHILE loop","DO-WHILE loop","IF statement"],a:2,exp:"A DO-WHILE loop executes the body first, then checks the condition."},
+    {q:"What is the purpose of an algorithm?",opts:["To store data","To provide step-by-step instructions to solve a problem","To display output","To connect to the internet"],a:1,exp:"An algorithm is a set of step-by-step instructions for solving a problem."},
+    {q:"Which of the following is a logic operator?",opts:["PRINT","INPUT","AND","LOOP"],a:2,exp:"AND, OR and NOT are logic operators used in conditions."},
+    {q:"What does a variable store?",opts:["A fixed value","A changing value in memory","A file on disk","An internet address"],a:1,exp:"A variable is a named memory location that can hold a changing value."},
+  ],
+  ictfund:[
+    {q:"Which of the following is an input device?",opts:["Monitor","Printer","Keyboard","Speaker"],a:2,exp:"A keyboard is an input device — it sends data to the computer."},
+    {q:"What does RAM stand for?",opts:["Read All Memory","Random Access Memory","Rapid Application Module","Run All Memory"],a:1,exp:"RAM = Random Access Memory — temporary, fast storage used while the computer is on."},
+    {q:"Which type of software manages hardware resources?",opts:["Application software","Utility software","Operating system","Browser"],a:2,exp:"The operating system manages all hardware resources and runs application software."},
+    {q:"What is a LAN?",opts:["Large Area Network","Local Access Node","Local Area Network","Long-range Application Network"],a:2,exp:"LAN = Local Area Network — connects devices within a small area like a building."},
+    {q:"What is the purpose of a firewall?",opts:["Speed up internet","Block unauthorised access","Store files","Print documents"],a:1,exp:"A firewall monitors and controls network traffic to block unauthorised access."},
+  ],
+  webdev:[
+    {q:"Which HTML tag creates the largest heading?",opts:["<h6>","<h1>","<header>","<title>"],a:1,exp:"<h1> creates the largest heading; <h6> the smallest."},
+    {q:"What attribute is used to add a link destination in <a>?",opts:["src","link","href","url"],a:2,exp:"The href attribute specifies the URL of the link destination."},
+    {q:"Which tag is used to display an image?",opts:["<image>","<pic>","<img>","<photo>"],a:2,exp:"<img src='...'> is the correct HTML tag for displaying images."},
+    {q:"What does CSS stand for?",opts:["Computer Style Syntax","Cascading Style Sheets","Creative Styling System","Code Style Sheet"],a:1,exp:"CSS = Cascading Style Sheets — used to style HTML pages."},
+    {q:"Which tag creates an unordered list?",opts:["<ol>","<li>","<ul>","<list>"],a:2,exp:"<ul> creates an unordered (bulleted) list; <ol> creates an ordered (numbered) list."},
+  ]
+};
+
+const TRACKER_DATA = {
+  appdev:{name:"💻 Applications Development",topics:["Variables & Data Types","Algorithms & Flowcharts","Decision Making (IF/ELSE)","Logic Operators (AND/OR/NOT)","FOR Loops","WHILE Loops","Functions & Procedures","Problem Solving Techniques"]},
+  ictfund:{name:"🌐 ICT Fundamentals",topics:["Hardware Components","Software Types","Operating Systems","Networking Basics","Internet & WWW","Email & Communication","Data & Information","Computer Security"]},
+  webdev:{name:"🖥️ Web Development",topics:["HTML Structure","Headings & Paragraphs","Lists & Tables","Images & Links","Forms Basics","CSS Introduction","Page Layout","Publishing Websites"]}
+};
+
+const TIPS_DATA = [
+  {module:"general",title:"Read questions carefully",body:"Always read each question at least twice before answering. Identify keywords like 'define', 'explain', 'list' or 'describe' — each requires a different type of answer."},
+  {module:"general",title:"Manage your time wisely",body:"Divide your exam time by the number of questions. Spend proportionate time on each. If stuck, skip and come back — never spend too long on one question."},
+  {module:"general",title:"Use all your study resources",body:"Don't rely on notes alone — practice with past papers, use flashcards, and test yourself with quizzes on this platform before your exam."},
+  {module:"general",title:"Study in short focused bursts",body:"Use the Pomodoro timer on this site: 25 minutes focused study, 5 minutes break. Research shows this improves retention significantly compared to long sessions."},
+  {module:"appdev",title:"Trace through your algorithms",body:"When writing or checking algorithms, trace through each step manually with sample data. This reveals logic errors before they cost you marks."},
+  {module:"appdev",title:"Learn the difference between = and ==",body:"In pseudocode, ← or = is assignment (storing a value), while == is comparison (checking if values are equal). Mixing these up is a common mistake."},
+  {module:"appdev",title:"Understand loop types",body:"Know when to use FOR loops (known number of repetitions) vs WHILE loops (unknown repetitions, condition-based). Examiners often test this distinction."},
+  {module:"ictfund",title:"Know your hardware vs software",body:"Hardware is physical (CPU, RAM, hard drive). Software is programs (OS, apps). Be able to classify and give examples of each — this appears in almost every exam."},
+  {module:"ictfund",title:"Remember network types",body:"LAN = Local Area Network (single building), WAN = Wide Area Network (multiple locations). Know the difference and be able to give real-world examples."},
+  {module:"ictfund",title:"Data vs Information",body:"Data = raw, unprocessed facts (numbers, letters). Information = data that has been processed and given context or meaning. Examiners love to test this distinction."},
+  {module:"webdev",title:"Memorise essential HTML tags",body:"Know these cold: <html>, <head>, <body>, <h1>–<h6>, <p>, <a href>, <img src>, <ul>, <ol>, <li>, <table>, <tr>, <td>. These appear in every web dev exam."},
+  {module:"webdev",title:"Always close your tags",body:"Every opening tag like <p> needs a closing tag </p>. Forgetting to close tags causes layout errors and can cost marks in practical questions."},
+  {module:"webdev",title:"Understand href vs src",body:"href is used in <a> tags for links. src is used in <img> tags for images. Don't mix them up — this is a common exam trap."},
+];
+
+const VIDEO_DATA = [
+  {module:"💻 App Dev",title:"Introduction to Algorithms",desc:"Visual explanation of algorithms, flowcharts and pseudocode basics.",emoji:"💻",url:"https://www.youtube.com/results?search_query=algorithms+for+beginners+pseudocode"},
+  {module:"💻 App Dev",title:"Variables & Data Types Explained",desc:"Learn what variables are, how to declare them and different data types.",emoji:"📦",url:"https://www.youtube.com/results?search_query=variables+data+types+programming+beginners"},
+  {module:"💻 App Dev",title:"Loops: FOR and WHILE",desc:"Understand how loops work with practical examples and step-by-step traces.",emoji:"🔄",url:"https://www.youtube.com/results?search_query=for+while+loops+programming+tutorial"},
+  {module:"🌐 ICT Fund",title:"Hardware vs Software",desc:"Clear explanation of hardware components and software categories with examples.",emoji:"🖥",url:"https://www.youtube.com/results?search_query=hardware+vs+software+ICT+basics"},
+  {module:"🌐 ICT Fund",title:"How Networks Work",desc:"LAN, WAN, the internet and how devices communicate with each other.",emoji:"🌐",url:"https://www.youtube.com/results?search_query=computer+networks+LAN+WAN+explained+beginners"},
+  {module:"🌐 ICT Fund",title:"Introduction to Cybersecurity",desc:"Firewalls, viruses, passwords and basic security concepts for ICT students.",emoji:"🔐",url:"https://www.youtube.com/results?search_query=cybersecurity+basics+ICT+students"},
+  {module:"🖥️ Web Dev",title:"HTML for Absolute Beginners",desc:"Build your first web page from scratch using HTML tags step by step.",emoji:"📄",url:"https://www.youtube.com/results?search_query=HTML+for+beginners+full+tutorial"},
+  {module:"🖥️ Web Dev",title:"HTML Tags You Must Know",desc:"The essential HTML tags every web development student needs to memorise.",emoji:"🏷",url:"https://www.youtube.com/results?search_query=essential+HTML+tags+web+development"},
+  {module:"🖥️ Web Dev",title:"CSS Basics — Styling Web Pages",desc:"Introduction to CSS: colours, fonts, margins and basic page styling.",emoji:"🎨",url:"https://www.youtube.com/results?search_query=CSS+basics+for+beginners+styling+web+pages"},
+];
+
+const SEARCH_INDEX = [
+  ...TIPS_DATA.map(t=>({type:"tip",title:t.title,snippet:t.body.substring(0,80)+"...",module:t.module,page:"tips"})),
+  {type:"resource",title:"Applications Development — Question Paper",snippet:"Past exam question paper for Applications Development module.",module:"appdev",page:"modules"},
+  {type:"resource",title:"Applications Development — Study Notes",snippet:"Comprehensive notes covering variables, algorithms, loops and more.",module:"appdev",page:"modules"},
+  {type:"resource",title:"ICT Fundamentals — Question Paper",snippet:"Past exam question paper for ICT Fundamentals module.",module:"ictfund",page:"modules"},
+  {type:"resource",title:"ICT Fundamentals — Study Notes",snippet:"Notes on hardware, software, networks, internet and data management.",module:"ictfund",page:"modules"},
+  {type:"resource",title:"Web Development — Question Paper",snippet:"Past exam question paper for Web Development module.",module:"webdev",page:"modules"},
+  {type:"resource",title:"Web Development — Study Notes",snippet:"HTML, CSS, links, images and web page structure notes.",module:"webdev",page:"modules"},
+  ...VIDEO_DATA.map(v=>({type:"video",title:v.title,snippet:v.desc,module:"video",page:"videos"})),
+  {type:"tool",title:"Pomodoro Focus Timer",snippet:"25-minute focused study sessions with 5-minute breaks.",module:"tools",page:"tools"},
+  {type:"tool",title:"Module Flashcards",snippet:"Flip cards to test your knowledge on all three ICT modules.",module:"tools",page:"tools"},
+  {type:"tool",title:"Module Quiz",snippet:"Multiple choice questions to test yourself on Applications Dev, ICT and Web Dev.",module:"tools",page:"tools"},
+  {type:"tool",title:"Progress Tracker",snippet:"Mark topics as studied and track your completion across all modules.",module:"tools",page:"tools"},
+  {type:"tool",title:"Exam Countdown",snippet:"Set your exam date and count down the days, hours and minutes remaining.",module:"tools",page:"tools"},
+];
+
+// ════════════ STORAGE ════════════
+const USERS_KEY = "itb_users_v3";
+const SESSION_KEY = "itb_session";
+const FEEDBACK_KEY = "itb_feedback_v2";
+const BOOKMARKS_KEY_PREFIX = "itb_bm_";
+const PROGRESS_KEY_PREFIX = "itb_prog_";
+const DOWNLOADS_KEY = "itb_downloads";
+const COUNTDOWN_KEY_PREFIX = "itb_cd_";
+const ANNOUNCE_KEY = "itb_announcements";
+const SESSIONS_KEY = "itb_pom_sessions";
+
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||"[]")}catch{return[]}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function getSession(){return sessionStorage.getItem(SESSION_KEY)}
+function isLoggedIn(){return!!getSession()}
+function isAdmin(){return getSession()==="admin"}
+
+function getBookmarks(){
+  const u=getSession(); if(!u)return[];
+  try{return JSON.parse(localStorage.getItem(BOOKMARKS_KEY_PREFIX+u)||"[]")}catch{return[]}
+}
+function saveBookmarks(bm){localStorage.setItem(BOOKMARKS_KEY_PREFIX+getSession(),JSON.stringify(bm))}
+function addBookmark(label){
+  const bm=getBookmarks();
+  if(!bm.find(b=>b.label===label)){bm.push({label,date:new Date().toLocaleDateString()});saveBookmarks(bm);showToast("Bookmarked: "+label,"success")}
+  else showToast("Already bookmarked!","info");
+}
+
+function getProgress(){
+  const u=getSession(); if(!u)return{};
+  try{return JSON.parse(localStorage.getItem(PROGRESS_KEY_PREFIX+u)||"{}")}catch{return{}}
+}
+function saveProgress(p){localStorage.setItem(PROGRESS_KEY_PREFIX+getSession(),JSON.stringify(p))}
+
+function getDownloads(){try{return JSON.parse(localStorage.getItem(DOWNLOADS_KEY)||"[]")}catch{return[]}}
+function trackDownload(name){
+  const dl=getDownloads(); dl.push({name,user:getSession(),date:new Date().toISOString()});
+  localStorage.setItem(DOWNLOADS_KEY,JSON.stringify(dl));
+}
+
+function getAnnouncements(){try{return JSON.parse(localStorage.getItem(ANNOUNCE_KEY)||"[]")}catch{return[]}}
+function saveAnnouncements(a){localStorage.setItem(ANNOUNCE_KEY,JSON.stringify(a))}
+
+// ════════════ AUTH ════════════
+function registerUser(username,password){
+  if(username.length<3)return{success:false,error:"Username must be at least 3 characters."};
+  if(password.length<6)return{success:false,error:"Password must be at least 6 characters."};
+  if(username.toLowerCase()==="admin")return{success:false,error:"That username is reserved."};
+  const users=getUsers();
+  if(users.find(u=>u.username.toLowerCase()===username.toLowerCase()))return{success:false,error:"Username already taken — try another."};
+  users.push({username,password,joined:new Date().toLocaleDateString()});
+  saveUsers(users);return{success:true};
+}
+function loginUser(username,password){
+  if(username.toLowerCase()==="admin"&&password==="admin123"){
+    sessionStorage.setItem(SESSION_KEY,"admin");return{success:true,role:"admin"};
+  }
+  const users=getUsers();
+  const user=users.find(u=>u.username.toLowerCase()===username.toLowerCase()&&u.password===password);
+  if(user){sessionStorage.setItem(SESSION_KEY,user.username);return{success:true,role:"student"}}
+  return{success:false,error:"Incorrect username or password. Please try again."};
+}
+function logoutUser(){sessionStorage.removeItem(SESSION_KEY)}
+
+// ════════════ NAV ════════════
+const allSections=document.querySelectorAll('.page-section');
+let currentPage="home";
+function switchPage(pageId){
+  allSections.forEach(s=>s.classList.remove('active-section'));
+  const t=document.getElementById(pageId+'-section');
+  if(t){t.classList.add('active-section');window.scrollTo(0,0)}
+  currentPage=pageId;renderNav();
+  if(pageId==="profile")renderProfile();
+  if(pageId==="admin"&&isAdmin())renderAdmin();
+  if(pageId==="tools"){initTracker();initCountdownFromStorage()}
+  if(pageId==="tips")renderTips();
+  if(pageId==="videos")renderVideos();
+  if(pageId==="home")renderHomeBanner();
+}
+
+function renderNav(){
+  const nav=document.getElementById('dynamicNav'); if(!nav)return;
+  nav.innerHTML='';
+  const darkBtn=document.createElement('button');
+  darkBtn.className='dark-toggle';darkBtn.title='Toggle dark mode';
+  darkBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';
+  darkBtn.onclick=()=>{document.body.classList.toggle('dark');darkBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('itb_dark',document.body.classList.contains('dark'))};
+  nav.appendChild(darkBtn);
+  if(!isLoggedIn()){
+    [['Login','login'],['Sign Up','signup']].forEach(([name,page])=>{
+      const a=mkNavLink(name,page);nav.appendChild(a);
+    });
+    return;
+  }
+  const links=isAdmin()
+    ?[['Home','home'],['Modules','modules'],['Admin','admin'],['Contact','contact']]
+    :[['Home','home'],['About','about'],['Modules','modules'],['Tools','tools'],['Tips','tips'],['Videos','videos'],['Search','search'],['Profile','profile'],['Contact','contact']];
+  links.forEach(([name,page])=>{nav.appendChild(mkNavLink(name,page))});
+  const w=document.createElement('span');w.className='welcome-text';w.textContent='👋 '+getSession();nav.appendChild(w);
+  const lb=document.createElement('a');lb.textContent='Logout';lb.className='logout-btn';lb.style.cursor='pointer';
+  lb.onclick=e=>{e.preventDefault();logoutUser();showToast('Logged out successfully.','success');renderNav();switchPage('login')};
+  nav.appendChild(lb);
+}
+function mkNavLink(name,page){
+  const a=document.createElement('a');a.textContent=name;
+  if(currentPage===page)a.classList.add('active');
+  a.href='#';a.onclick=e=>{e.preventDefault();switchPage(page)};
+  return a;
+}
+window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',scrollY>10)});
+
+// ════════════ TOAST ════════════
+function showToast(msg,type='success'){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');t.className='toast toast-'+type;
+  const icon={success:'✅',error:'❌',info:'ℹ️'}[type]||'ℹ️';
+  t.innerHTML=`<span class="toast-icon">${icon}</span><span>${msg}</span><button class="toast-dismiss">&times;</button>`;
+  c.appendChild(t);
+  t.querySelector('.toast-dismiss').onclick=()=>t.remove();
+  setTimeout(()=>{if(t.parentNode)t.remove()},4000);
+}
+
+// ════════════ POMODORO ════════════
+let pomInterval=null,pomSeconds=25*60,pomIsRunning=false,pomIsBreak=false,pomCompletedSessions=parseInt(localStorage.getItem(SESSIONS_KEY)||'0');
+function updatePomDisplay(){
+  const m=Math.floor(pomSeconds/60).toString().padStart(2,'0');
+  const s=(pomSeconds%60).toString().padStart(2,'0');
+  document.getElementById('pomTime').textContent=m+':'+s;
+  const total=pomIsBreak?5*60:25*60;
+  const pct=Math.max(0,pomSeconds/total)*100;
+  document.getElementById('pomCircle').style.setProperty('--pom-prog',pct+'%');
+}
+function pomToggle(){
+  if(pomIsRunning){clearInterval(pomInterval);pomIsRunning=false;document.getElementById('pomStart').textContent='▶ Resume'}
+  else{
+    pomIsRunning=true;document.getElementById('pomStart').textContent='⏸ Pause';
+    pomInterval=setInterval(()=>{
+      pomSeconds--;updatePomDisplay();
+      if(pomSeconds<=0){
+        clearInterval(pomInterval);pomIsRunning=false;
+        if(!pomIsBreak){pomCompletedSessions++;localStorage.setItem(SESSIONS_KEY,pomCompletedSessions);document.getElementById('pomSessions').textContent='Sessions completed: '+pomCompletedSessions;showToast('🎉 Focus session complete! Take a break.','success')}
+        else showToast('☕ Break over! Back to work.','info');
+        pomIsBreak=!pomIsBreak;pomSeconds=pomIsBreak?5*60:25*60;
+        document.getElementById('pomMode').textContent=pomIsBreak?'Break':'Focus';
+        document.getElementById('pomStart').textContent='▶ Start';
+        updatePomDisplay();
+      }
+    },1000);
+  }
+}
+function pomReset(){clearInterval(pomInterval);pomIsRunning=false;pomIsBreak=false;pomSeconds=25*60;document.getElementById('pomMode').textContent='Focus';document.getElementById('pomStart').textContent='▶ Start';updatePomDisplay()}
+function pomSwitch(){pomReset();pomIsBreak=true;pomSeconds=5*60;document.getElementById('pomMode').textContent='Break';updatePomDisplay()}
+
+// ════════════ FLASHCARDS ════════════
+let fcIndex=0,fcCards=[],fcFlipped=false;
+function loadFlashcards(){
+  const mod=document.getElementById('fcModuleSelect')?.value||'appdev';
+  fcCards=FLASHCARD_DATA[mod];fcIndex=0;showCard();
+}
+function showCard(){
+  fcFlipped=false;
+  const card=document.getElementById('flashcard');
+  if(card)card.classList.remove('flipped');
+  document.getElementById('fcFront').textContent=fcCards[fcIndex].q;
+  document.getElementById('fcBack').textContent=fcCards[fcIndex].a;
+  document.getElementById('fcCounter').textContent=(fcIndex+1)+' / '+fcCards.length;
+}
+function flipCard(){const c=document.getElementById('flashcard');fcFlipped=!fcFlipped;c.classList.toggle('flipped',fcFlipped)}
+function nextCard(){fcIndex=(fcIndex+1)%fcCards.length;showCard()}
+function prevCard(){fcIndex=(fcIndex-1+fcCards.length)%fcCards.length;showCard()}
+document.addEventListener('DOMContentLoaded',()=>{if(document.getElementById('fcModuleSelect'))loadFlashcards()});
+
+// ════════════ PROGRESS TRACKER ════════════
+function initTracker(){
+  const wrap=document.getElementById('trackerModules');if(!wrap)return;
+  wrap.innerHTML='';
+  const prog=getProgress();
+  Object.entries(TRACKER_DATA).forEach(([modKey,modData])=>{
+    const checked=prog[modKey]||[];
+    const pct=Math.round((checked.length/modData.topics.length)*100);
+    const el=document.createElement('div');el.className='tracker-mod';
+    el.innerHTML=`<div class="tracker-mod-header"><div class="tracker-mod-name">${modData.name}</div><div class="tracker-pct">${pct}%</div></div>
+    <div class="tracker-topics">${modData.topics.map((t,i)=>`<label class="tracker-topic${checked.includes(i)?' done':''}" style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" ${checked.includes(i)?'checked':''} data-mod="${modKey}" data-idx="${i}" onchange="toggleTopic(this)"><span>${t}</span></label>`).join('')}</div>
+    <div class="tracker-prog-wrap"><div class="tracker-prog" style="width:${pct}%" id="tprog_${modKey}"></div></div>`;
+    wrap.appendChild(el);
+  });
+}
+function toggleTopic(cb){
+  const mod=cb.dataset.mod,idx=parseInt(cb.dataset.idx);
+  const prog=getProgress();
+  if(!prog[mod])prog[mod]=[];
+  if(cb.checked){if(!prog[mod].includes(idx))prog[mod].push(idx)}
+  else prog[mod]=prog[mod].filter(i=>i!==idx);
+  saveProgress(prog);
+  const label=cb.closest('label');if(label)label.classList.toggle('done',cb.checked);
+  const pct=Math.round((prog[mod].length/TRACKER_DATA[mod].topics.length)*100);
+  const pbar=document.getElementById('tprog_'+mod);if(pbar)pbar.style.width=pct+'%';
+  const headers=document.querySelectorAll('[data-mod-header="'+mod+'"]');
+  const modEl=cb.closest('.tracker-mod');
+  if(modEl){const h=modEl.querySelector('.tracker-pct');if(h)h.textContent=pct+'%'}
+  if(isLoggedIn()&&currentPage==='profile')renderProfile();
+}
+
+// ════════════ EXAM COUNTDOWN ════════════
+let cdInterval=null;
+function updateCountdown(){
+  const nameEl=document.getElementById('examName'),dateEl=document.getElementById('examDate');
+  if(!dateEl||!dateEl.value)return;
+  const name=nameEl?.value||'Exam';
+  const key=COUNTDOWN_KEY_PREFIX+getSession();
+  localStorage.setItem(key,JSON.stringify({name,date:dateEl.value}));
+  startCountdown(name,dateEl.value);
+}
+function initCountdownFromStorage(){
+  const key=COUNTDOWN_KEY_PREFIX+getSession();
+  try{const d=JSON.parse(localStorage.getItem(key)||'null');
+    if(d){document.getElementById('examName').value=d.name;document.getElementById('examDate').value=d.date;startCountdown(d.name,d.date)}
+  }catch{}
+}
+function startCountdown(name,dateStr){
+  if(cdInterval)clearInterval(cdInterval);
+  function tick(){
+    const now=new Date(),target=new Date(dateStr);
+    const diff=target-now;
+    const display=document.getElementById('countdownDisplay'),past=document.getElementById('countdownPast');
+    if(!display)return;
+    if(diff<=0){display.style.display='none';past.style.display='block';clearInterval(cdInterval);return}
+    past.style.display='none';display.style.display='grid';
+    const days=Math.floor(diff/86400000),hours=Math.floor((diff%86400000)/3600000),mins=Math.floor((diff%3600000)/60000),secs=Math.floor((diff%60000)/1000);
+    document.getElementById('cdDays').textContent=days;document.getElementById('cdHours').textContent=hours;document.getElementById('cdMins').textContent=mins;document.getElementById('cdSecs').textContent=secs;
+  }
+  tick();cdInterval=setInterval(tick,1000);
+}
+
+// ════════════ QUIZ ════════════
+let quizState={mod:'appdev',qIndex:0,score:0,answered:false};
+function startQuiz(){
+  quizState={mod:document.getElementById('quizModSelect')?.value||'appdev',qIndex:0,score:0,answered:false};
+  renderQuiz();
+}
+function renderQuiz(){
+  const body=document.getElementById('quizBody'),progFill=document.getElementById('quizProgFill');
+  const qs=QUIZ_DATA[quizState.mod];
+  if(quizState.qIndex>=qs.length){
+    const pct=Math.round((quizState.score/qs.length)*100);
+    const emoji=pct>=80?'🎉':pct>=60?'👍':'💪';
+    body.innerHTML=`<div class="quiz-score"><div class="quiz-score-num">${quizState.score}/${qs.length}</div><div class="quiz-score-label">${pct}% — ${emoji} ${pct>=80?'Excellent!':pct>=60?'Good job! Keep practising.':'Keep studying — you\'ve got this!'}</div><br><button class="pom-btn pom-btn-primary" onclick="startQuiz()" style="margin-top:16px">↺ Try Again</button></div>`;
+    progFill.style.width='100%';return;
+  }
+  const q=qs[quizState.qIndex];progFill.style.width=((quizState.qIndex/qs.length)*100)+'%';
+  body.innerHTML=`<div class="quiz-q">${q.q}</div>
+  <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQuiz(${i})">${o}</button>`).join('')}</div>
+  <div id="qFeedback"></div>
+  <div class="quiz-nav"><span style="font-size:13px;color:var(--muted)">Question ${quizState.qIndex+1} of ${qs.length}</span><button class="pom-btn pom-btn-primary btn-sm" id="qNextBtn" style="display:none" onclick="nextQuestion()">Next →</button></div>`;
+}
+function answerQuiz(idx){
+  if(quizState.answered)return;quizState.answered=true;
+  const q=QUIZ_DATA[quizState.mod][quizState.qIndex];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>o.disabled=true);
+  opts[q.a].classList.add('correct');
+  const fb=document.getElementById('qFeedback'),nextBtn=document.getElementById('qNextBtn');
+  if(idx===q.a){quizState.score++;fb.className='quiz-feedback correct';fb.textContent='✅ Correct! '+q.exp}
+  else{opts[idx].classList.add('wrong');fb.className='quiz-feedback wrong';fb.textContent='❌ Incorrect. '+q.exp}
+  if(nextBtn)nextBtn.style.display='inline-flex';
+}
+function nextQuestion(){quizState.qIndex++;quizState.answered=false;renderQuiz()}
+
+// ════════════ EXAM TIPS ════════════
+let currentFilter='all';
+function renderTips(filter){
+  filter=filter||currentFilter;currentFilter=filter;
+  const grid=document.getElementById('tipsGrid');if(!grid)return;
+  const tips=filter==='all'?TIPS_DATA:TIPS_DATA.filter(t=>t.module===filter);
+  const labelMap={general:'General',appdev:'App Dev',ictfund:'ICT Fund',webdev:'Web Dev'};
+  grid.innerHTML=tips.map(t=>`<div class="tip-card" data-module="${t.module}">
+    <span class="tip-badge ${t.module}">${labelMap[t.module]||t.module}</span>
+    <h3>${t.title}</h3><p>${t.body}</p>
+    <button class="mod-link" style="background:none;border:none;cursor:pointer;margin-top:10px;font-family:inherit" onclick="addBookmark('Tip: ${t.title.replace(/'/g,'')}')">🔖 Bookmark</button>
+  </div>`).join('');
+}
+function filterTips(btn,filter){
+  document.querySelectorAll('.tip-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderTips(filter);
+}
+
+// ════════════ VIDEOS ════════════
+function renderVideos(){
+  const grid=document.getElementById('videoGrid');if(!grid)return;
+  grid.innerHTML=VIDEO_DATA.map(v=>`<div class="video-card">
+    <a href="${v.url}" target="_blank" class="video-thumb">${v.emoji}</a>
+    <div class="video-info">
+      <div class="video-module">${v.module}</div>
+      <div class="video-title">${v.title}</div>
+      <div class="video-desc">${v.desc}</div>
+      <a href="${v.url}" target="_blank" class="video-link">▶ Search on YouTube →</a>
+    </div>
+  </div>`).join('');
+}
+
+// ════════════ PROFILE ════════════
+function renderProfile(){
+  const wrap=document.getElementById('profileWrap');if(!wrap||!isLoggedIn())return;
+  const user=getSession(),prog=getProgress(),bm=getBookmarks();
+  const totalTopics=Object.values(TRACKER_DATA).reduce((s,m)=>s+m.topics.length,0);
+  const doneTopics=Object.values(prog).reduce((s,arr)=>s+(arr?.length||0),0);
+  const dl=getDownloads().filter(d=>d.user===user).length;
+  wrap.innerHTML=`<div class="profile-top">
+    <div class="profile-card">
+      <div class="profile-avatar">${user[0].toUpperCase()}</div>
+      <div class="profile-name">${user}</div>
+      <div class="profile-role">ICT Student</div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num">${doneTopics}</div><div class="pstat-label">Topics Studied</div></div>
+        <div class="pstat"><div class="pstat-num">${dl}</div><div class="pstat-label">Downloads</div></div>
+        <div class="pstat"><div class="pstat-num">${bm.length}</div><div class="pstat-label">Bookmarks</div></div>
+        <div class="pstat"><div class="pstat-num">${Math.round((doneTopics/totalTopics)*100)}%</div><div class="pstat-label">Overall Progress</div></div>
+      </div>
+    </div>
+    <div class="profile-details">
+      <div>
+        <div class="profile-section-title">Study Progress</div>
+        <div class="progress-list">${Object.entries(TRACKER_DATA).map(([k,m])=>{
+          const checked=(prog[k]||[]).length,pct=Math.round((checked/m.topics.length)*100);
+          return`<div class="prog-item"><div class="prog-header"><div class="prog-name">${m.name}</div><div class="prog-pct">${pct}%</div></div><div class="prog-bar-wrap"><div class="prog-bar" style="width:${pct}%"></div></div></div>`;
+        }).join('')}</div>
+      </div>
+      <div style="margin-top:24px">
+        <div class="profile-section-title">Bookmarks</div>
+        ${bm.length===0?'<p style="color:var(--muted);font-size:14px">No bookmarks yet. Bookmark tips and resources to find them quickly here.</p>':
+        `<div class="bookmarks-list">${bm.map((b,i)=>`<div class="bookmark-item"><div class="bm-left">🔖 ${b.label}</div><button class="bm-remove" onclick="removeBookmark(${i})" title="Remove">×</button></div>`).join('')}</div>`}
+      </div>
+    </div>
+  </div>`;
+}
+function removeBookmark(idx){const bm=getBookmarks();bm.splice(idx,1);saveBookmarks(bm);renderProfile();showToast("Bookmark removed","info")}
+
+// ════════════ ADMIN ════════════
+function renderAdmin(){
+  const wrap=document.getElementById('adminWrap');if(!wrap)return;
+  const users=getUsers(),feedbacks=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]');
+  const dl=getDownloads(),ann=getAnnouncements();
+  wrap.innerHTML=`
+  <div class="admin-stats">
+    <div class="admin-stat"><div class="admin-stat-num">${users.length}</div><div class="admin-stat-label">Registered Students</div></div>
+    <div class="admin-stat"><div class="admin-stat-num">${feedbacks.length}</div><div class="admin-stat-label">Feedback Received</div></div>
+    <div class="admin-stat"><div class="admin-stat-num">${dl.length}</div><div class="admin-stat-label">Total Downloads</div></div>
+    <div class="admin-stat"><div class="admin-stat-num">${ann.length}</div><div class="admin-stat-label">Announcements</div></div>
+  </div>
+  <div class="admin-grid">
+    <div class="admin-card">
+      <div class="admin-card-title">👥 Registered Students</div>
+      <div class="user-list">${users.length===0?'<p style="color:var(--muted);font-size:13px">No students registered yet.</p>':users.map(u=>`<div class="user-item"><div class="user-item-name">👤 ${u.username} <span class="user-badge badge-student">Student</span></div><div class="user-date">${u.joined||'—'}</div></div>`).join('')}</div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-title">💬 Student Feedback</div>
+      <div class="feedback-list-admin">${feedbacks.length===0?'<p style="color:var(--muted);font-size:13px">No feedback yet.</p>':feedbacks.slice().reverse().map((f,i)=>`<div class="fb-item"><div class="fb-item-user">👤 ${f.user||'Anonymous'}</div><div class="fb-item-msg">${f.message}</div><div class="fb-item-date">${f.date?new Date(f.date).toLocaleDateString():''}</div></div>`).join('')}</div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-title">📢 Post Announcement</div>
+      <div class="announce-form">
+        <input type="text" id="annTitle" placeholder="Announcement title" style="padding:10px 13px">
+        <textarea id="annBody" placeholder="Announcement message..." style="min-height:70px;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--off);color:var(--text);resize:vertical"></textarea>
+        <select id="annType" style="padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--off);color:var(--text)"><option value="info">ℹ️ Info</option><option value="success">✅ Update</option><option value="warn">⚠️ Warning</option></select>
+        <button class="submit-btn" onclick="postAnnouncement()">📢 Post Announcement</button>
+      </div>
+      <div style="margin-top:18px">
+        ${ann.length===0?'<p style="color:var(--muted);font-size:13px">No announcements posted yet.</p>':ann.slice().reverse().map((a,i)=>`<div style="background:var(--off);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-weight:700;font-size:13px;color:var(--navy)">${a.title}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${a.body}</div></div><button class="delete-btn" onclick="deleteAnnouncement(${ann.length-1-i})">🗑</button></div>`).join('')}
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-title">📥 Recent Downloads</div>
+      <div style="max-height:260px;overflow-y:auto">${dl.length===0?'<p style="color:var(--muted);font-size:13px">No downloads tracked yet.</p>':dl.slice().reverse().slice(0,20).map(d=>`<div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--off);border-radius:8px;margin-bottom:6px;font-size:13px"><span style="color:var(--navy);font-weight:600">${d.name}</span><span style="color:var(--muted)">${d.user||'?'}</span></div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+function postAnnouncement(){
+  const title=document.getElementById('annTitle')?.value?.trim();
+  const body=document.getElementById('annBody')?.value?.trim();
+  const type=document.getElementById('annType')?.value||'info';
+  if(!title||!body){showToast('Please fill in both fields.','error');return}
+  const ann=getAnnouncements();ann.push({title,body,type,date:new Date().toISOString()});saveAnnouncements(ann);
+  showToast('✅ Announcement posted!','success');renderAdmin();renderHomeBanner();
+  document.getElementById('annTitle').value='';document.getElementById('annBody').value='';
+}
+function deleteAnnouncement(idx){const ann=getAnnouncements();ann.splice(idx,1);saveAnnouncements(ann);renderAdmin();renderHomeBanner();showToast('Announcement deleted.','info')}
+
+// ════════════ ANNOUNCEMENTS BANNER ════════════
+function renderHomeBanner(){
+  const banner=document.getElementById('homeBanner'),text=document.getElementById('bannerText');
+  if(!banner||!text)return;
+  const ann=getAnnouncements();
+  if(ann.length===0){banner.style.display='none';return}
+  const latest=ann[ann.length-1];
+  const icons={info:'📢',success:'✅',warn:'⚠️'};
+  text.innerHTML=`${icons[latest.type]||'📢'} <strong>${latest.title}</strong> — ${latest.body}`;
+  banner.style.display='flex';
+}
+
+// ════════════ SEARCH ════════════
+function doSearch(){
+  const q=document.getElementById('searchInput')?.value?.trim().toLowerCase();
+  const results=document.getElementById('searchResults');if(!results)return;
+  if(!q){results.innerHTML='<div class="search-empty">Start typing to search across all resources, tips and tools.</div>';return}
+  const matches=SEARCH_INDEX.filter(item=>item.title.toLowerCase().includes(q)||item.snippet.toLowerCase().includes(q));
+  if(matches.length===0){results.innerHTML='<div class="search-empty">No results found for "'+q+'" — try different keywords.</div>';return}
+  const typeLabels={tip:'💡 Exam Tip',resource:'📄 Resource',video:'▶️ Video',tool:'🛠 Tool'};
+  results.innerHTML=matches.map(m=>`<div class="search-result-item" onclick="switchPage('${m.page}')">
+    <div class="sr-module">${typeLabels[m.type]||m.type}</div>
+    <div class="sr-title">${m.title}</div>
+    <div class="sr-snippet">${m.snippet}</div>
+  </div>`).join('');
+}
+
+// ════════════ LOGIN / SIGNUP ════════════
+document.getElementById('loginForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const username=document.getElementById('loginUsername').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  const msg=document.getElementById('loginMessage');
+  const result=loginUser(username,password);
+  if(result.success){
+    msg.className='success-msg';msg.textContent='✅ Login successful! Welcome back.';msg.style.display='flex';
+    renderNav();
+    setTimeout(()=>{switchPage(result.role==='admin'?'admin':'home');msg.style.display='none';},900);
+  }else{
+    msg.className='error-msg';msg.textContent='⚠️ '+result.error;msg.style.display='flex';
+    document.getElementById('loginPassword').value='';
+  }
+});
+document.getElementById('signupForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const username=document.getElementById('signupUsername').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  const confirm=document.getElementById('signupConfirm').value;
+  const msg=document.getElementById('signupMessage');msg.style.display='none';
+  if(password!==confirm){msg.className='error-msg';msg.textContent='⚠️ Passwords do not match.';msg.style.display='flex';return}
+  const result=registerUser(username,password);
+  if(result.success){
+    msg.className='success-msg';msg.textContent='✅ Account created! Redirecting to login...';msg.style.display='flex';
+    setTimeout(()=>{switchPage('login');document.getElementById('signupForm').reset();document.getElementById('pwBar').style.width='0%';document.getElementById('pwLabel').textContent='';msg.style.display='none';},1200);
+  }else{msg.className='error-msg';msg.textContent='⚠️ '+result.error;msg.style.display='flex'}
+});
+document.getElementById('signupPassword').addEventListener('input',function(){
+  const v=this.value,bar=document.getElementById('pwBar'),label=document.getElementById('pwLabel');
+  let score=0;if(v.length>=6)score++;if(v.length>=10)score++;if(/[A-Z]/.test(v))score++;if(/[0-9]/.test(v))score++;if(/[^A-Za-z0-9]/.test(v))score++;
+  const map={0:['0%','#e2e8f0',''],1:['20%','#ef4444','Weak'],2:['40%','#f97316','Fair'],3:['60%','#eab308','Good'],4:['80%','#22c55e','Strong'],5:['100%','#0d9488','Very strong']};
+  const [w,c,t]=map[score]||map[0];bar.style.width=w;bar.style.background=c;label.textContent=t;label.style.color=c;
+});
+document.getElementById('gotoSignupFromLogin').addEventListener('click',e=>{e.preventDefault();switchPage('signup')});
+document.getElementById('gotoLoginFromSignup').addEventListener('click',e=>{e.preventDefault();switchPage('login')});
+document.getElementById('brandHome').addEventListener('click',e=>{e.preventDefault();switchPage(isLoggedIn()?(isAdmin()?'admin':'home'):'login')});
+
+// ════════════ DATA-PAGE LINKS ════════════
+document.querySelectorAll('[data-page]').forEach(el=>{
+  if(!el.closest('.nav-links'))el.addEventListener('click',e=>{
+    e.preventDefault();const page=el.getAttribute('data-page');
+    if(isLoggedIn())switchPage(page);else switchPage('login');
+  });
+});
+
+// ════════════ FEEDBACK MODAL ════════════
+const modal=document.getElementById('feedbackModal');
+document.getElementById('feedbackBtn').onclick=()=>{isLoggedIn()?modal.style.display='flex':showToast('Please log in to send feedback.','error')};
+document.getElementById('closeModal').onclick=()=>modal.style.display='none';
+window.addEventListener('click',e=>{if(e.target===modal)modal.style.display='none'});
+document.getElementById('feedbackForm').addEventListener('submit',e=>{
+  e.preventDefault();const msg=document.getElementById('feedbackText').value.trim();
+  const result=document.getElementById('feedbackResult');
+  if(!msg){result.innerHTML='<span style="color:var(--danger)">Please write something first.</span>';return}
+  const fb=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]');
+  fb.push({user:getSession(),message:msg,date:new Date().toISOString()});
+  localStorage.setItem(FEEDBACK_KEY,JSON.stringify(fb));
+  result.innerHTML='<span style="color:var(--teal)">✅ Thank you! Feedback saved.</span>';
+  document.getElementById('feedbackText').value='';
+  setTimeout(()=>{result.innerHTML='';modal.style.display='none'},1800);
+});
+
+// ════════════ DARK MODE RESTORE ════════════
+if(localStorage.getItem('itb_dark')==='true')document.body.classList.add('dark');
+
+// ════════════ BOOT ════════════
+if(isLoggedIn()){
+  switchPage(isAdmin()?'admin':'home');
+  loadFlashcards();
+}else{
+  switchPage('login');
+}
+
+
+
+</script>
+</body>
+</html>
